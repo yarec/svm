@@ -82,11 +82,19 @@ ins_scsh(){
 
 ins_s48(){
     S48_TMP_DIR=.tmp_s48_src
-    S48_SOURCE="https://github.com/scheme/scsh"
-    git_clone "s48" $S48_TMP_DIR $S48_SOURCE
-    cd "$SCSH_TMP_DIR" && \
-        git submodule update --init && \
-        autoreconf && \
+    S48_SOURCE="https://github.com/yarec/s48"
+    #git_clone "s48" $S48_TMP_DIR $S48_SOURCE
+
+    S48_TMP_DIR="scheme48-1.9.2"
+    S48_SOURCE="http://s48.org/1.9.2/scheme48-1.9.2.tgz"
+    S48_TAR="s48-1.9.2.tgz"
+    curl -s $S48_SOURCE -o $S48_TAR || {
+        echo >&2 "Failed to download '$XVM_SOURCE'.."
+        return 1
+    }
+    tar xvf $S48_TAR
+    cd "$S48_TMP_DIR" && \
+        #./autogen.sh && \
         ./configure && make install
 }
 
@@ -97,8 +105,10 @@ else
     if has "scheme48"; then
         echo "scheme48 ok"
     else
+        ins_s48
         echo "scheme48 not found"
     fi
+    ins_scsh
 fi
 
 if [ -z "$METHOD" ]; then
