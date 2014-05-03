@@ -14,16 +14,35 @@ if [ -z "$XVM_DIR" ]; then
 fi
 
 if ! has "curl"; then
-  if has "wget"; then
-    # Emulate curl with wget
-    curl() {
-      ARGS="$* "
-      ARGS=${ARGS/-s /-q }
-      ARGS=${ARGS/-o /-O }
-      wget $ARGS
-    }
-  fi
+    if has "wget"; then
+        # Emulate curl with wget
+        curl() {
+            ARGS="$* "
+            ARGS=${ARGS/-s /-q }
+            ARGS=${ARGS/-o /-O }
+            wget $ARGS
+        }
+    fi
+#else
+#    curl() {
+#        ARGS="$* "
+#        curl -# $ARGS
+#    }
 fi
+
+yn() {
+    while true; do
+        echo "$1"
+        read yn < /dev/tty
+        case $yn in
+            [Yy]* ) return 0;;
+            [Nn]* ) return 1;;
+            * ) echo "Please answer yes or no. ";;
+        esac
+    done
+}
+
+
 
 git_clone(){
     REPO=$1
@@ -72,44 +91,74 @@ install_as_script() {
 
 ins_scsh(){
     SCSH_TMP_DIR=.tmp_scsh_src
-    SCSH_SOURCE="https://github.com/scheme/scsh"
-    git_clone "scsh" $SCSH_TMP_DIR $SCSH_SOURCE
+    SCSH_SOURCE="https://gitcafe.com/yarec/scsh"
+    if [ ! -d "$SCSH_TMP_DIR/.git" ]; then
+        git_clone "scsh" $SCSH_TMP_DIR $SCSH_SOURCE
+    fi
     cd "$SCSH_TMP_DIR" && \
         git submodule update --init && \
         autoreconf && \
         ./configure && make install
 }
 
+#deps git gcc autoconf
 ins_s48(){
     S48_TMP_DIR=.tmp_s48_src
     S48_SOURCE="https://github.com/yarec/s48"
     #git_clone "s48" $S48_TMP_DIR $S48_SOURCE
 
     S48_TMP_DIR="scheme48-1.9.2"
-    S48_SOURCE="http://s48.org/1.9.2/scheme48-1.9.2.tgz"
-    S48_TAR="s48-1.9.2.tgz"
-    curl -s $S48_SOURCE -o $S48_TAR || {
-        echo >&2 "Failed to download '$XVM_SOURCE'.."
-        return 1
-    }
+    #S48_TMP_DIR="s48"
+    S48_SOURCE="https://gitcafe.com/yarec/s48/raw/master/scheme48-1.9.2.tgz"
+    S48_TAR="s48-1.9.2.tar.gz"
+    if [ ! -f "$S48_TAR" ]; then
+        curl -kL $S48_SOURCE -o $S48_TAR || {
+            echo >&2 "Failed to download '$S48_SOURCE'.."
+            return 1
+        }
+    fi
     tar xvf $S48_TAR
+
     cd "$S48_TMP_DIR" && \
-        #./autogen.sh && \
         ./configure && make install
 }
 
-if has "scsh"; then
-    echo "scsh ok"
-else
-    echo "scsh not found"
-    if has "scheme48"; then
-        echo "scheme48 ok"
+check_tool(){
+    TOOL=$1
+    sleep 0.1
+    if has "$TOOL"; then
+        echo "$TOOL ok"
     else
-        ins_s48
-        echo "scheme48 not found"
+        echo "$TOOL not found"
+        if yn "install $TOOL now?"; then
+            yum -y install $TOOL
+        fi
     fi
-    ins_scsh
-fi
+}
+
+check_scsh(){
+    if has "scsh"; then
+        echo "scsh ok"
+    else
+        echo "scsh not found"
+        if has "scheme48"; then
+            echo "scheme48 ok"
+        else
+            echo "scheme48 not found"
+            ins_s48
+        fi
+        ins_scsh
+    fi
+}
+
+check_env(){
+    for TOOL in git gcc autoconf; do
+        check_tool $TOOL
+    done
+}
+
+check_env
+check_scsh
 
 if [ -z "$METHOD" ]; then
   # Autodetect install method
@@ -167,7 +216,7 @@ if [ -z "$PROFILE" ] || [ ! -f "$PROFILE" ] ; then
   echo "   $SOURCE_STR"
   echo
 else
-  if ! grep -qc 'nvm.sh' $PROFILE; then
+  if ! grep -qc '$APP_NAME.sh' $PROFILE; then
     echo "=> Appending source string to $PROFILE"
     echo "" >> "$PROFILE"
     echo $SOURCE_STR >> "$PROFILE"
