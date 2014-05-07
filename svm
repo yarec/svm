@@ -1,0 +1,15 @@
+#!/bin/sh
+
+scsh='/usr/local/bin/scsh'
+
+loads='foo-i.scm
+       foo-p.scm
+       bar.scm
+       svm-i.scm
+       svm-p.scm'
+ll=''
+for i in $loads; do
+    ll="$ll -ll $i"
+done
+
+$scsh +lp scheme $ll -m svm -c "(main)" $*

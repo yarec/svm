@@ -12,6 +12,9 @@ has() {
 if [ -z "$XVM_DIR" ]; then
   XVM_DIR="$HOME/.$APP_NAME"
 fi
+if [ -z "$XVM_SRC_DIR" ]; then
+  XVM_SRC_DIR="$XVM_DIR/src/svm"
+fi
 
 if ! has "curl"; then
     if has "wget"; then
@@ -60,14 +63,14 @@ install_from_git() {
     XVM_SOURCE="https://github.com/yarec/svm.git"
   fi
 
-  if [ -d "$XVM_DIR/.git" ]; then
-    echo "=> $APP_NAME is already installed in $XVM_DIR, trying to update"
+  if [ -d "$XVM_SRC_DIR/.git" ]; then
+    echo "=> $APP_NAME is already installed in $XVM_SRC_DIR, trying to update"
     echo -e "\r=> \c"
-    cd "$XVM_DIR" && git pull 2> /dev/null || {
-      echo >&2 "Failed to update $APP_NAME, run 'git pull' in $XVM_DIR yourself.."
+    cd "$XVM_SRC_DIR" && git pull 2> /dev/null || {
+      echo >&2 "Failed to update $APP_NAME, run 'git pull' in $XVM_SRC_DIR yourself.."
     }
   else
-    git_clone $APP_NAME $XVM_DIR $XVM_SOURCE
+    git_clone $APP_NAME $XVM_SRC_DIR $XVM_SOURCE
   fi
 }
 
@@ -90,7 +93,7 @@ install_as_script() {
 }
 
 ins_scsh(){
-    SCSH_TMP_DIR=.tmp_scsh_src
+    SCSH_TMP_DIR=$HOME/.svm/src/scsh
     SCSH_SOURCE="https://gitcafe.com/yarec/scsh"
     if [ ! -d "$SCSH_TMP_DIR/.git" ]; then
         git_clone "scsh" $SCSH_TMP_DIR $SCSH_SOURCE
@@ -103,21 +106,23 @@ ins_scsh(){
 
 #deps git gcc autoconf
 ins_s48(){
-    S48_TMP_DIR=.tmp_s48_src
+    S48_TMP_DIR=$HOME/.svm/src/s48
     S48_SOURCE="https://github.com/yarec/s48"
     #git_clone "s48" $S48_TMP_DIR $S48_SOURCE
 
-    S48_TMP_DIR="scheme48-1.9.2"
+    S48_TMP_DIR="$HOME/.svm/archives/scheme48-1.9.2"
     #S48_TMP_DIR="s48"
     S48_SOURCE="https://gitcafe.com/yarec/s48/raw/master/scheme48-1.9.2.tgz"
-    S48_TAR="s48-1.9.2.tar.gz"
+    S48_TAR=$HOME/.svm/archives/s48-1.9.2.tar.gz
+    S48_ARCHIVES_DIR=$HOME/.svm/archives
     if [ ! -f "$S48_TAR" ]; then
+        mkdir -p $S48_ARCHIVES_DIR
         curl -kL $S48_SOURCE -o $S48_TAR || {
             echo >&2 "Failed to download '$S48_SOURCE'.."
             return 1
         }
     fi
-    tar xvf $S48_TAR
+    tar xvf $S48_TAR -C $S48_ARCHIVES_DIR
 
     cd "$S48_TMP_DIR" && \
         ./configure && make install
@@ -130,9 +135,9 @@ check_tool(){
         echo "$TOOL ok"
     else
         echo "$TOOL not found"
-        if yn "install $TOOL now?"; then
+        #if yn "install $TOOL now?"; then
             yum -y install $TOOL
-        fi
+        #fi
     fi
 }
 

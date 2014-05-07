@@ -65,15 +65,17 @@
     (ins-vimrc      vimrc-dir)
     ))
 
-
 ;(ins-vim)
-(let* ((vimrc-dir      (string-append env-home "/.vim/vimrc"))
-       (base-path      (if (file-exists? "/upg/vimrc") "/upg/vimrc" vimrc-dir))
-       (vimrc          (string-append base-path "/vimrc.vim"))
-       (vim-files      (string-append base-path "/vimfiles")))
-  (setenv "BASE_PATH" base-path)
-  (setenv "VIMRT"     vim-files)
-  (setenv "VUNDLE"    "true")
-  (init-vimrc vimrc-dir)
-  (run (vim -u ,vimrc /upg)))
+
+(define (start-vim)
+  (let* ((vimrc-dir      (string-append env-home "/.vim/vimrc"))
+         (base-path      (if (file-exists? "/upg/vimrc") "/upg/vimrc" vimrc-dir))
+         (vimrc          (string-append base-path "/vimrc.vim"))
+         (vim-files      (string-append base-path "/vimfiles")))
+    (setenv "BASE_PATH" base-path)
+    (setenv "VIMRT"     vim-files)
+    (setenv "VUNDLE"    "true")
+    (init-vimrc vimrc-dir)
+    (run (vim -u ,vimrc /upg)))
+  )
 
