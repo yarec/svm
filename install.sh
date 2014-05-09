@@ -131,9 +131,7 @@ ins_s48(){
 check_tool(){
     TOOL=$1
     sleep 0.1
-    if has "$TOOL"; then
-        echo "$TOOL ok"
-    else
+    if ! has "$TOOL"; then
         echo "$TOOL not found"
         #if yn "install $TOOL now?"; then
             yum -y install $TOOL
@@ -142,14 +140,8 @@ check_tool(){
 }
 
 check_scsh(){
-    if has "scsh"; then
-        echo "scsh ok"
-    else
-        echo "scsh not found"
-        if has "scheme48"; then
-            echo "scheme48 ok"
-        else
-            echo "scheme48 not found"
+    if ! has "scsh"; then
+        if ! has "scheme48"; then
             ins_s48
         fi
         ins_scsh
@@ -196,16 +188,19 @@ echo
 
 # Detect profile file if not specified as environment variable (eg: PROFILE=~/.myprofile).
 if [ -z "$PROFILE" ]; then
-  if [ -f "$HOME/.bash_profile" ]; then
-    PROFILE="$HOME/.bash_profile"
-  elif [ -f "$HOME/.zshrc" ]; then
+  if [ -f "$HOME/.zshrc" ]; then
     PROFILE="$HOME/.zshrc"
+  elif [ -f "$HOME/.bash_profile" ]; then
+    PROFILE="$HOME/.bash_profile"
   elif [ -f "$HOME/.profile" ]; then
     PROFILE="$HOME/.profile"
   fi
 fi
 
-SOURCE_STR="[ -s \"$XVM_DIR/$APP_NAME.sj\" ] && . \"$XVM_DIR/$APP_NAME.sh\"  # This loads $APP_NAME"
+BINPATH="\$HOME/.$APP_NAME/bin"
+if [ -d /upg/svm ]; then BINPATH=/upg/svm/bin; fi
+
+SOURCE_STR="export PATH="\$PATH:$BINPATH" # Add $APP_NAME to PATH for scripting"
 
 if [ -z "$PROFILE" ] || [ ! -f "$PROFILE" ] ; then
   if [ -z $PROFILE ]; then
@@ -221,7 +216,7 @@ if [ -z "$PROFILE" ] || [ ! -f "$PROFILE" ] ; then
   echo "   $SOURCE_STR"
   echo
 else
-  if ! grep -qc '$APP_NAME.sh' $PROFILE; then
+  if ! grep -qc $APP_NAME'/bin' $PROFILE; then
     echo "=> Appending source string to $PROFILE"
     echo "" >> "$PROFILE"
     echo $SOURCE_STR >> "$PROFILE"

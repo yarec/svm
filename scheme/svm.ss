@@ -40,8 +40,7 @@
     (setenv "WTPATH"   wtpath)
     (setenv "RV_VIMRT" vimrt)
     (run 
-      (/usr/bin/vim -u ,vimrc -p /upg -p /ws/www-xyingyong)))
-  )
+      (/usr/bin/vim -u ,vimrc -p /upg -p /ws/www-xyingyong))))
 
 
 (define (git-clone src dir)
@@ -62,8 +61,7 @@
         (vundle-dir     (string-append env-home "/.vim/bundle/vundle")))
     (ins-vundle     vundle-dir)
     (ins-amix-vimrc amix-vimrc-dir)
-    (ins-vimrc      vimrc-dir)
-    ))
+    (ins-vimrc      vimrc-dir)))
 
 ;(ins-vim)
 
@@ -76,6 +74,5 @@
     (setenv "VIMRT"     vim-files)
     (setenv "VUNDLE"    "true")
     (init-vimrc vimrc-dir)
-    (run (vim -u ,vimrc /upg)))
-  )
+    (run (vim -u ,vimrc /upg))))
 
