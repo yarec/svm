@@ -1,5 +1,25 @@
+(define (is-root)
+  (let*
+    ((user-0 (user-info (getenv "USER")))
+     (user-id (user-info:uid user-0)))
+    (if (eqv? user-id 0) #t #f)))
 
-(define env-home (getenv "HOME"))
+(define (is-not-root) (not (is-root)))
+
+(define (pkg-install pkg-name)
+  (let* ((os-type (run/string (oscheck)))
+         (ins-cmd '(apt-get -q install ))
+         (name pkg-name))
+    (cond 
+      ((string=? os-type "redhat\n") 
+       (begin
+         (set! ins-cmd '(yum -y install ))
+         (set! name (string-append pkg-name "el")))))
+
+    (let ((cmd (append ins-cmd `(,name))))
+      (if (is-not-root)
+        (run ,(append '(sudo) cmd))
+        (run ,cmd)))))
 
 ;; string utils
 (define (str-split str ch)
@@ -20,7 +40,7 @@
 ;; net utils
 ;;
 (define (download url fname)
-  (run (curl ,url) 
+  (run (curl -kL ,url) 
        (> 1 ,fname)))
 
 (define (git-clone src dir)
@@ -78,13 +98,13 @@
          (desc (caddr desc-opt))
          (handler (cadddr desc-opt)))
 
-;    (display type)
-;    (display arg)
-;    (display arg-name)
-;    (display short-name)
-;    (display desc)
-;    (display handler)
-;    (display "\n")
+    ;    (display type)
+    ;    (display arg)
+    ;    (display arg-name)
+    ;    (display short-name)
+    ;    (display desc)
+    ;    (display handler)
+    ;    (display "\n")
 
     (if (or (equal? arg-name arg)
             (equal? short-name arg))
