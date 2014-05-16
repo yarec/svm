@@ -33,6 +33,13 @@
                   (run (./configure))
                   (run (make install)))))))
 
+(define (install-vim-handler data oret-data)
+ (display 1)
+)
+(define (init-vimrc-handler data oret-data)
+ (display 1)
+)
+
 (define (start-vim)
   (let* ((vimrc-dir      (string-append (home-dir) "/.vim/myvimrc"))
          (base-path      (if (file-exists? "/upg/vimrc") "/upg/vimrc" vimrc-dir))
@@ -46,28 +53,11 @@
     (init-vimrc vimrc-dir)
     (run (vim -u ,vimrc /upg))))
 
-(define (vim)
-  (define desc-opts
+(define (vim data oret-data)
+  (get-opt 
     `(
       (--help        -h  " vprint this usage message  " ,get-opt-usage)
-      (--install-vim -   " install vim                " ,install-vim)
-      (--init-rc     -c  " init vimrc                 " ,init-vimrc)
+      (--install-vim -|s   " install vim                " ,install-vim-handler)
+      (--init-rc     -c  " init vimrc                 " ,init-vimrc-handler)
       ))
-
-  (let ((args (cdr command-line-arguments)))
-    ;(display "vim mode")
-    ;(for-each (lambda (opt) (handle-desc-opt opt arg)) desc-opts)
-
-    (let* ((ret (get-opt-parse args desc-opts))
-           (opt (if (null? ret) '(#f) (car ret)))
-           (handler (if (car opt) (cadddr opt) #f))
-           )
-      (if handler 
-        (apply handler '())
-        (start-vim)
-        )
-      ;(display ret)
-      ;(display handler)
-      )
-    )
   )

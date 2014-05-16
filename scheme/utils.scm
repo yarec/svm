@@ -6,6 +6,12 @@
 
 (define (is-not-root) (not (is-root)))
 
+(define (has-cmd cmd)
+  (let ((ret (run/string (which ,cmd))))
+    (if (string=? ret "") #f #t)))
+
+(define (has-no-cmd cmd) (not (has-cmd cmd)))
+
 (define (pkg-install pkg-name)
   (let* ((os-type (run/string (oscheck)))
          (ins-cmd '(apt-get -q install ))
@@ -50,7 +56,19 @@
 ;; get-opt 
 (define get-opt-desc-opts #f)
 
-(define (get-opt-usage)
+(define-record-type oret :oret
+  (oret ok value type ismode name handler opt) 
+  oret?
+  (ok oret:ok set-oret!:ok)
+  (value oret:value set-oret!:value)
+  (type oret:type set-oret!:type)
+  (ismode oret:ismode set-oret!:ismode)
+  (name oret:name set-oret!:name)
+  (handler oret:handler set-oret!:handler)
+  (opt oret:opt set-oret!:opt)
+  )
+
+(define (get-opt-usage data oret-list)
   (let ((ls '())
         (max-len 0))
     (for-each 
@@ -90,27 +108,6 @@
     )
   )
 
-(define (get-opt-handle desc-opt arg)
-  (let* ((arg-name (symbol->string (car desc-opt)))
-         (short-name-pair (str-split (symbol->string (cadr desc-opt)) #\|))
-         (short-name (car short-name-pair))
-         (type (if (null? (cdr short-name-pair)) '(m) (cdr short-name-pair)))
-         (desc (caddr desc-opt))
-         (handler (cadddr desc-opt)))
-
-    ;    (display type)
-    ;    (display arg)
-    ;    (display arg-name)
-    ;    (display short-name)
-    ;    (display desc)
-    ;    (display handler)
-    ;    (display "\n")
-
-    (if (or (equal? arg-name arg)
-            (equal? short-name arg))
-      `(#t ,type ,arg-name ,handler ,desc-opt)
-      '(#f))))
-
 (define (get-opt-parse args desc-opts)
   (let ((match-list '())
         (mode #f))
@@ -118,18 +115,76 @@
     (let lp ((args args))
       (let ((arg (if (null? args) '() (car args)))
             (rest (if (null? args) '() (cdr args))))
+        ;(display args)(display "\n")
         (if (not (null? arg))
-          (for-each (lambda (opt) 
-                      (let* ((ret (get-opt-handle opt arg))
-                             (is-match (car ret)))
-                        (if is-match 
-                          (let ((type (cadr ret)))
-                            ;(display type)(display " ------ matched")(display "\n")
-                            (if (equal? type '(m)) (set! mode ret)) 
-                            (set! match-list (cons ret match-list))))))
-                    get-opt-desc-opts))
-        (if (and (not (null? rest))
-                 (not mode))
+          (for-each 
+            (lambda (desc-opt) 
+              (let* ((arg-name (symbol->string (car desc-opt)))
+                     (short-name-pair (str-split (symbol->string (cadr desc-opt)) #\|))
+                     (short-name (car short-name-pair))
+                     (arg-length (length short-name-pair))
+                     (type (if (null? (cdr short-name-pair)) "b"
+                             (cadr short-name-pair)))
+                     (ismode (cond 
+                               ((equal? arg-length 1) #t)
+                               ((equal? arg-length 2) #f)
+                               ((equal? arg-length 3) 
+                                (if (equal? (caddr short-name-pair) "t") #t #f))
+                               ))
+                     (desc (caddr desc-opt))
+                     (handler (cadddr desc-opt))
+                     (ok (if (or (equal? arg-name arg)
+                                 (equal? short-name arg)) #t #f))
+                     (value (if (equal? type "b") "" 
+                              (let ((val (if (null? rest) "" 
+                                           (car rest))))
+                                (if (and (not (null? rest)) ok)
+                                  (set! rest (cdr rest)))
+                                val)))
+                     (vals (oret ok value type ismode arg-name handler desc-opt)))
+                ;                        (for-each (lambda (x) (display " ")(display x))
+                ;                                  `(,(length short-name-pair) 
+                ;                                     " | arg: "
+                ;                                     ,arg
+                ;                                     " | short-name: "
+                ;                                     ,short-name
+                ;                                     " | ok: "
+                ;                                     ,ok
+                ;                                     ,arg-name 
+                ;                                     " | type: "
+                ;                                     ,type 
+                ;                                     " | type=b?: "
+                ;                                     ,(equal? type "b")
+                ;                                     ,ismode 
+                ;                                     ,desc
+                ;                                     "\n"))
+                (if ok 
+                  (begin 
+                    (if ismode 
+                      (if (not mode)
+                        (begin
+                          (set! mode vals)
+                          (set! match-list (cons vals match-list))))
+                      (set! match-list (cons vals match-list)))
+                    ))))
+            get-opt-desc-opts))
+        (if (not (null? rest))
           (lp rest))))
     match-list))
+
+
+(define (get-opt opts)
+  (let* ((oret-list (get-opt-parse command-line-arguments opts))
+         (f (lambda (dat)
+              (apply (oret:handler dat) `(,dat ,oret-list) ))))
+    (if (null? oret-list)
+      (display "no args")
+      (let ((lst '()))
+        (for-each 
+          (lambda (dat)
+            (if (oret:ismode dat)
+              (f dat)))
+          oret-list)))))
+
+
 
