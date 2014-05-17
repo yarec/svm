@@ -40,18 +40,25 @@
  (display 1)
 )
 
-(define (start-vim)
+(define (start-vim data oret-data)
   (let* ((vimrc-dir      (string-append (home-dir) "/.vim/myvimrc"))
          (base-path      (if (file-exists? "/upg/vimrc") "/upg/vimrc" vimrc-dir))
          (vimrc          (string-append base-path "/vimrc.vim"))
          (vim-files      (string-append base-path "/vimfiles"))
-         (svm-dir        (string-append (home-dir) "/.svm")))
+         (svm-dir        (string-append (home-dir) "/.svm"))
+         (files          '()))
+
+    (for-each (lambda (x)
+                (set! files (cons '-p (cons x files))))
+              (reverse (cdr command-line-arguments)))
+
     (setenv "BASE_PATH" base-path)
     (setenv "VIMRT"     vim-files)
     (setenv "VUNDLE"    "true")
     (install-vim svm-dir)
     (init-vimrc vimrc-dir)
-    (run (vim -u ,vimrc /upg))))
+    (run (vim -u ,vimrc ,@files))
+    ))
 
 (define (vim data oret-data)
   (get-opt 
@@ -59,5 +66,6 @@
       (--help        -h  " vprint this usage message  " ,get-opt-usage)
       (--install-vim -|s   " install vim                " ,install-vim-handler)
       (--init-rc     -c  " init vimrc                 " ,init-vimrc-handler)
+      (--default     -   " default action             " ,start-vim)
       ))
   )
