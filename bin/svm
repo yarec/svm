@@ -5,4 +5,4 @@ upgschemedir=/upg/svm/scheme
 if [ -d $upgschemedir ]; then schemedir=$upgschemedir; fi
 loads="svm-interfaces.scm svm-package.scm"
 ll=''; for i in $loads; do ll="$ll -ll $i"; done
-$scsh +lp $schemedir $ll -m svm -c '(main)' $*
+$scsh +lp $schemedir $ll -m svm -c '(main)' $* 2>/dev/null

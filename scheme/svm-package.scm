@@ -7,4 +7,5 @@
   (files utils
          vim 
          brunch
+         rsh
          svm))

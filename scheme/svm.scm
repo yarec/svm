@@ -10,7 +10,11 @@
   )
 
 
+(define svm-conf #f)
 (define (main)
+ (let ((conf-file (string-append (home-dir) "/.svm/conf/conf.scm")))
+   (if (file-exists? conf-file)
+     (load conf-file)))
   (get-opt 
     `(
 ;      (--t1 -       "  b   #t "  ,get-opt-usage)
@@ -23,7 +27,7 @@
       (--vim    -     " vim                       " ,vim)
       (--brunch -     " brunch tool               " ,brunch)
       (--upg    -u|s  " upg manage                " upg-manage)
-      (--ssh    -     " ssh login                 " ssh-tool)
+      (--rsh    -     " ssh login                 " ,rsh)
       (--tmp    -t    " tmp misc                  " ,tmp)
       (--debug  -d|b  " debug                     " ,tmp)
       ))
