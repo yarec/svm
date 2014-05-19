@@ -194,7 +194,7 @@
 
 
 ;; svm-conf
-(define svm-conf #f)
+(define svm-conf '())
 (define (get-conf name)
   (filter (lambda (x) 
             (equal? name (car x)))

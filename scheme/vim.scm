@@ -41,9 +41,11 @@
 )
 
 (define (get-vim-conf name)
-  (filter (lambda (x) 
-            (equal? name (car x)))
-          (cadr (car (get-conf 'vim)))))
+  (filter (lambda (x) (equal? name (car x)))
+          (let ((conf (get-conf 'vim)))
+            (if (null? conf) 
+              '()
+              (cadr (car conf))))))
 
 (define (start-vim data oret-data)
   (let* ((vimrc-dir      (string-append (home-dir) "/.vim/myvimrc"))
@@ -54,7 +56,7 @@
          (openlist       (get-vim-conf 'openlist))
          (cmd-files      (cdr command-line-arguments))
          (files          (zip1 '-p (if (null? cmd-files)
-                                     (cadr (car openlist))
+                                     (if (null? openlist) '() (cadr (car openlist)))
                                      cmd-files))))
     (setenv "BASE_PATH" base-path)
     (setenv "VIMRT"     vim-files)
