@@ -42,6 +42,13 @@
              (else (split a (+ 1 b)))))))
       (split 0 0))))
 
+;; list utils
+(define (zip1 item items)
+  (let ((lst '()))
+    (for-each (lambda (x) (set! lst (cons item (cons x lst))))
+              (reverse items))
+    lst))
+
 
 ;; net utils
 ;;
@@ -186,4 +193,9 @@
                   opts)))))
 
 
-
+;; svm-conf
+(define svm-conf #f)
+(define (get-conf name)
+  (filter (lambda (x) 
+            (equal? name (car x)))
+          svm-conf))
