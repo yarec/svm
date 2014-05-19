@@ -54,6 +54,11 @@
     (run (git clone ,src ,dir))))
 
 ;; get-opt 
+(define (get-arg-2nd)
+  (let ((len (length command-line-arguments)))
+    (if (>= len 2)
+      (cadr command-line-arguments) "")))
+
 (define get-opt-desc-opts #f)
 
 (define-record-type oret :oret

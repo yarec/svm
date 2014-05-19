@@ -11,6 +11,7 @@ spawn ssh $user@$server -p $port
 expect {
   "> " { }
   "$ " { }
+  "# " { }
   "assword: " { 
         send "$pass\n" 
   }
