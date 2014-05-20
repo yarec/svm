@@ -11,8 +11,10 @@
 
 
 (define (main)
-  (let ((conf-file (string-append (home-dir) "/.svm/conf/svm-conf.scm")))
-    (if (file-exists? conf-file) (load conf-file)))
+  (let ((conf-file (string-append (home-dir) "/.svm/conf/svm-conf.scm"))
+        (svm-dir   (string-append (home-dir) "/.svm"))
+        (svm-path  (if (file-exists? "/upg/svm") "/upg/svm" (string-append svm-dir "/src/svm"))))
+    (setenv "SVM_PATH" svm-path))
   (get-opt 
     `(
       ;      (--t1 -       "  b   #t "  ,get-opt-usage)
