@@ -6,15 +6,12 @@
     (if (string=? "" arg-2nd)
       (display "arg ned")
       (for-each (lambda (x)
-                  (let* ((name (car x))
-                         (sname (cond 
-                                  ((number? name) (number->string name))
-                                  ((symbol? name) (symbol->string name))))
+                  (let* ((name (get-conf-str1 x))
                          (rest (cdr x))
                          (rest-port (if (equal? (length rest) 3)
                                       (reverse (cons 22 (reverse rest)))
                                       rest)))
-                    (if (string=? sname arg-2nd)
+                    (if (string=? name arg-2nd)
                       (run (expssh ,@rest-port)))))
                 (cadr (car rsh-conf))))))
 

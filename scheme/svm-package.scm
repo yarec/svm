@@ -8,4 +8,5 @@
          vim 
          brunch
          rsh
+         esh
          svm))

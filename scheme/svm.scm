@@ -14,6 +14,7 @@
   (let ((conf-file (string-append (home-dir) "/.svm/conf/svm-conf.scm"))
         (svm-dir   (string-append (home-dir) "/.svm"))
         (svm-path  (if (file-exists? "/upg/svm") "/upg/svm" (string-append svm-dir "/src/svm"))))
+    (if (file-exists? conf-file) (load conf-file))
     (setenv "SVM_PATH" svm-path))
   (get-opt 
     `(
@@ -27,6 +28,7 @@
       (--vim    -     " [vv] vim                  " ,vim)
       (--brunch -     " [bh] brunch tool          " ,brunch)
       (--rsh    -     " [rsh] ssh login           " ,rsh)
+      (--esh    -     " [esh] exec shell          " ,esh)
       (--upg    -u|s  " upg manage                " upg-manage)
       (--tmp    -t    " tmp misc                  " ,tmp)
       (--debug  -d|b  " debug                     " ,tmp))))

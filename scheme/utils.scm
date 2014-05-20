@@ -199,3 +199,10 @@
   (filter (lambda (x) 
             (equal? name (car x)))
           svm-conf))
+(define (get-conf-str1 lst)
+  (let* ((name (car lst)))
+    (cond 
+      ((number? name) (number->string name))
+      ((symbol? name) (symbol->string name)))))
+
+
