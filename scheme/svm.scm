@@ -1,6 +1,6 @@
 ;; Parse Command Line Args
 
-(define (tmp)
+(define (tmp a b)
   ;(display "tmp misc")
   ;(display (home-dir))
   ;(display (is-not-root))
@@ -9,13 +9,10 @@
   (display (has-cmd "node"))
   )
 
-
 (define (main)
-  (let ((conf-file (string-append (home-dir) "/.svm/conf/svm-conf.scm"))
-        (svm-dir   (string-append (home-dir) "/.svm"))
-        (svm-path  (if (file-exists? "/upg/svm") "/upg/svm" (string-append svm-dir "/src/svm"))))
-    (if (file-exists? conf-file) (load conf-file))
-    (setenv "SVM_PATH" svm-path))
+  (let ((conf-file (string-append (home-dir) "/.svm/conf/svm-conf.scm")))
+    (if (file-exists? conf-file) (load conf-file)))
+  (setenv "SVM_PATH" svm-path)
   (get-opt 
     `(
       ;      (--t1 -       "  b   #t "  ,get-opt-usage)
@@ -29,6 +26,6 @@
       (--brunch -     " [bh] brunch tool          " ,brunch)
       (--rsh    -     " [rsh] ssh login           " ,rsh)
       (--esh    -     " [esh] exec shell          " ,esh)
-      (--upg    -u|s  " upg manage                " upg-manage)
+      (--upg    -     " upg manage                " ,upg)
       (--tmp    -t    " tmp misc                  " ,tmp)
       (--debug  -d|b  " debug                     " ,tmp))))

@@ -197,7 +197,7 @@ if [ -z "$PROFILE" ]; then
   fi
 fi
 
-BINPATH="\$HOME/.$APP_NAME/bin"
+BINPATH="\$HOME/.$APP_NAME/src/svm/bin"
 if [ -d /upg/svm ]; then BINPATH=/upg/svm/bin; fi
 
 SOURCE_STR="export PATH="$BINPATH:\$PATH" # Add $APP_NAME to PATH for scripting"

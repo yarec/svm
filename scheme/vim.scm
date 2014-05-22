@@ -69,6 +69,6 @@
   (get-opt 
     `(
       (--help        -h  " vprint this usage message  " ,get-opt-usage)
-      (--install-vim -|s " install vim                " ,install-vim-handler)
+      (--ins-vim     -|s " install vim                " ,install-vim-handler)
       (--init-rc     -c  " init vimrc                 " ,init-vimrc-handler)
       (--default     -   " default action             " ,start-vim))))

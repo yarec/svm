@@ -27,9 +27,9 @@
   (get-opt 
     `(
       (--help         -h     " bprint this usage message "  ,get-opt-usage)
-      (--install-node -      " install vim               "  ,install-node)
+      (--ins-node     -      " install vim               "  ,install-node)
       (--ember        -m|s|t " new tapas-with-ember      "  ,new-ember)
-      (--install-pkg  -i|    " install with npm&bower    "  ,install-pkg)
+      (--ins-pkg      -i|    " install with npm&bower    "  ,install-pkg)
       (--debug        -d||f  " debug                     "  #f)
       (--default      -      " default action            "  ,get-opt-usage)
       )))
