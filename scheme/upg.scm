@@ -76,7 +76,35 @@ EOF
       (if (not (null? rest))
         (loop rest)))))
 
+(define upg-repos (directory-files "/upg"))
+(define (upg-status)
+  (for-each (lambda (x) 
+              (let* ((repo (string-append "/upg/" x))
+                     (git-dir (string-append repo "/.git"))
+                     (hg-dir (string-append repo "/.hg")))
+                (out (string-append "   [** " repo " **] "))
+                (if (file-exists? git-dir)
+                  (run (git -C ,repo status -s)))
+                (if (file-exists? hg-dir)
+                  (run (hg -R ,repo st )))))
+            upg-repos))
 
+(define (upg-check cmd)
+  (let ((baseurl "ssh://hg@bitbucket.org/yarec/"))
+    (for-each (lambda (x) 
+                (let* ((repo (string-append "/upg/" x))
+                       (repourl  (string-append baseurl x))
+                       (hg-dir (string-append repo "/.hg")))
+                  (out (string-append "   [** " repo " **] "))
+                  (if (file-exists? hg-dir)
+                    (run (hg -R ,repo ,@cmd ,repourl)))))
+              upg-repos)))
+
+(define (upg-ckpull)
+  (upg-check '(incoming --quiet)))
+
+(define (upg-ckpush)
+  (upg-check '(outgoing --quiet --template "{node}")))
 
 (define (start-upg data oret-data)
   (let* ((len (length command-line-arguments)) 
@@ -95,7 +123,9 @@ EOF
                                         (awk "{print $2}")
                                         (sed -e "s/\"//g")))))
                    (upg-pull-all repos-str user ignore)))
-      ((y) "y")
+      ((st) (upg-status))
+      ((ckpull) (upg-ckpull))
+      ((ckpush) (upg-ckpush))
       (else "z"))))
 
 
