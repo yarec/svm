@@ -6,7 +6,14 @@
   ;(display (is-not-root))
 
   ;(pkg-install "ncurses-dev")
-  (display (has-cmd "node"))
+  ;(display (has-cmd "node"))
+
+
+  (define cmd '(run (| (ls -a1 ".")
+                       (awk "NR>2{print}")
+                       (xargs -Iitem du -sh item)
+                       (sort -h))))
+  (runcmd cmd)
   )
 
 (define (main)

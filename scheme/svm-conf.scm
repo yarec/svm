@@ -17,6 +17,10 @@
             (echo 2)
             (echo 3))
       (te (tailf ,(string-append (home-dir) "/.svm/log/error.log")))
+      (du '(run (| (ls -a1)
+                   (awk "NR>2{print}")
+                   (xargs -Iitem du -sh item)
+                   (sort -h))))
       (le (less ,(string-append (home-dir) "/.svm/log/error.log")))
       (test1 ))))
 

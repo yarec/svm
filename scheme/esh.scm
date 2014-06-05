@@ -9,7 +9,7 @@
                          (cmds (cdr x)))
                     (if (string=? name arg-2nd)
                       (for-each (lambda (cmd)
-                                  (run (,@cmd)))
+                                  (runcmd cmd))
                                 cmds))))
                 (cdr (car esh-conf))))))
 
