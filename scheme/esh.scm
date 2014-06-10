@@ -1,6 +1,8 @@
+(define (get-esh-cmds)
+  (cdr (car (get-conf 'esh))))
+
 (define (start-esh data oret-data)
   (let* ((len (length command-line-arguments)) 
-         (esh-conf (get-conf 'esh))
          (arg-2nd (get-arg-2nd)))
     (if (string=? "" arg-2nd)
       (display "arg ned")
@@ -11,11 +13,17 @@
                       (for-each (lambda (cmd)
                                   (runcmd cmd))
                                 cmds))))
-                (cdr (car esh-conf))))))
+                (get-esh-cmds)))))
+
+(define (esh-list-cmds d od)
+  (for-each (lambda (x) 
+              (cout (car x)))
+            (get-esh-cmds)))
 
 
 (define (esh data oret-data)
   (get-opt 
     `(
       (--help         -h     " bprint this usage message "  ,get-opt-usage)
+      (--list         -l     " list cmds                 "  ,esh-list-cmds)
       (--default      -      " default action            "  ,start-esh))))

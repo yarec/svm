@@ -13,7 +13,7 @@
 (define (has-no-cmd cmd) (not (has-cmd cmd)))
 
 (define (pkg-install pkg-name)
-  (let* ((os-type (run/string (oscheck)))
+  (let* ((os-type (run/string (,(string-append svm-path "/shell/oscheck"))))
          (ins-cmd '(apt-get -q install ))
          (name pkg-name))
     (cond 

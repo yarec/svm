@@ -12,7 +12,7 @@
                                       (reverse (cons 22 (reverse rest)))
                                       rest)))
                     (if (string=? name arg-2nd)
-                      (run (expssh ,@rest-port)))))
+                      (run (,(string-append svm-path "/shell/expssh") ,@rest-port)))))
                 (cadr (car rsh-conf))))))
 
 
