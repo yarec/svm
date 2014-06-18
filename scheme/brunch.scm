@@ -22,6 +22,8 @@
   (run  (npm install))
   (run (bower install)))
 
+(define (run-brunch d od)
+  (run (brunch w -s)))
 
 (define (brunch data oret-data)
   (get-opt 
@@ -29,6 +31,7 @@
       (--help         -h     " bprint this usage message "  ,get-opt-usage)
       (--ins-node     -      " install vim               "  ,install-node)
       (--ember        -m|s|t " new tapas-with-ember      "  ,new-ember)
+      (--run          -r     " run and watch             "  ,run-brunch)
       (--ins-pkg      -i|    " install with npm&bower    "  ,install-pkg)
       (--debug        -d||f  " debug                     "  #f)
       (--default      -      " default action            "  ,get-opt-usage)
