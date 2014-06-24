@@ -16,12 +16,27 @@
       (test (echo 1)
             (echo 2)
             (echo 3))
-      (te (tailf ,(string-append (home-dir) "/.svm/log/error.log")))
-      (du '(run (| (ls -a1)
+
+      (te  (tailf ,(string-append (home-dir) "/.svm/log/error.log")))
+      (le  (less  ,(string-append (home-dir) "/.svm/log/error.log")))
+      (tne (tailf ,(string-append "/var/log/nginx/error.log")))
+
+      (du  (run (| (ls -a1)
                    (awk "NR>2{print}")
                    (xargs -Iitem du -sh item)
                    (sort -h))))
-      (le (less ,(string-append (home-dir) "/.svm/log/error.log")))
+
+      (base (sudo apt-get -y install 
+                  curl vim-gnome expect zsh ctags cscope
+                  yakuake easystroke axel 
+                  mercurial git))
+
+      (mzsh (run (| (curl -L http://install.ohmyz.sh) 
+                    (sudo sh))))
+
+      (lnmp (sudo apt-get -y install 
+                  nginx php5-cli php5-fpm mysql-server php5-mysql))
+
       (test1 ))))
 
 
