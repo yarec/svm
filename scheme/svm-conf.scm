@@ -29,7 +29,7 @@
       (base (sudo apt-get -y install 
                   curl vim-gnome expect zsh ctags cscope
                   yakuake easystroke axel 
-                  mercurial git))
+                  mercurial git colordiff))
 
       (mzsh (run (| (curl -L http://install.ohmyz.sh) 
                     (sudo sh))))
