@@ -13,8 +13,7 @@
         (vundle-dir     (string-append (home-dir) "/.vim/bundle/vundle")))
     (ins-vundle     vundle-dir)
     (ins-amix-vimrc amix-vimrc-dir)
-    (ins-vimrc      vimrc-dir)
-    ))
+    (ins-vimrc      vimrc-dir)))
 
 (define (install-vim svm-dir)
   (let* ((vim-download-url "http://mirrors.go-parts.com/pub/vim/unix/vim-7.4.tar.bz2")
@@ -52,6 +51,7 @@
          (base-path      (if (file-exists? "/upg/vimrc") "/upg/vimrc" vimrc-dir))
          (vimrc          (string-append base-path "/vimrc.vim"))
          (vim-files      (string-append base-path "/vimfiles"))
+         (vim-tmp-dir    (string-append (home-dir) "/.vim/tmp"))
          (svm-dir        (string-append (home-dir) "/.svm"))
          (openlist       (get-vim-conf 'openlist))
          (cmd-files      (cdr command-line-arguments))
@@ -63,6 +63,7 @@
     (setenv "VUNDLE"    "true")
     (install-vim svm-dir)
     (init-vimrc vimrc-dir)
+    (run (mkdir -p ,vim-tmp-dir))
     (run (vim -u ,vimrc ,@files))))
 
 (define (vim data oret-data)

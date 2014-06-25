@@ -34,6 +34,9 @@
       (mzsh (run (| (curl -L http://install.ohmyz.sh) 
                     (sudo sh))))
 
+      (nvm  (run (| (curl -L https://raw.githubusercontent.com/creationix/nvm/v0.8.0/install.sh)
+                    (sh))))
+
       (lnmp (sudo apt-get -y install 
                   nginx php5-cli php5-fpm mysql-server php5-mysql))
 
