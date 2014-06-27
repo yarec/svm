@@ -171,6 +171,7 @@ check_scsh(){
         ins_scsh
     fi
 }
+
 set -e
 
 APP_NAME=svm
