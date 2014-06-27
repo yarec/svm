@@ -34,6 +34,7 @@
       (--rsh     -     " [rsh] ssh login           " ,rsh)
       (--esh     -     " [esh] exec shell          " ,esh)
       (--upg     -     " [upg] upg manage          " ,upg)
+      (--os      -     " [os]  os tool             " ,os)
       (--tmp     -t    " tmp misc                  " ,tmp)
       (--debug   -d|b  " debug                     " ,tmp)
       (--default -     " default action     "  ,get-opt-usage))))

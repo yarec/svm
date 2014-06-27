@@ -6,6 +6,15 @@
 
 (define (is-not-root) (not (is-root)))
 
+(define (root-run cmd) 
+  (if (is-not-root)
+    (run ,(append '(sudo) cmd))
+    (run ,cmd)))
+
+(define (f-ln src desc)
+  (if (file-exists? src)
+    (root-run `(ln -sf ,src ,desc))))
+
 (define (has-cmd cmd)
   (let ((ret (run/string (which ,cmd))))
     (if (string=? ret "") #f #t)))
