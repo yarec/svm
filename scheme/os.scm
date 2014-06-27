@@ -2,7 +2,7 @@
   ;; rt
   (for-each (lambda (x)
               (f-ln (string-append "/rt/" (symbol->string x)) 
-                    (string-append "/" (symbol->string x))))
+                    "/"))
             '(upg ws app dld vcs))
   ;; dotfiles
   (for-each (lambda (x)

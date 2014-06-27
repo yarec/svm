@@ -76,7 +76,9 @@ EOF
       (if (not (null? rest))
         (loop rest)))))
 
-(define upg-repos (directory-files "/upg"))
+(define upg-repos 
+ (if (file-exists? "/upg")
+   (directory-files "/upg") '()))
 (define (upg-status)
   (for-each (lambda (x) 
               (let* ((repo (string-append "/upg/" x))
