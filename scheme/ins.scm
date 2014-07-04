@@ -19,6 +19,26 @@
       )
     ))
 
+;; install libs from source
+(define (install-freetds d od)
+  ;; freetds(conf: 8.0 utf8)
+  ;; durl: ftp://ftp.freetds.org/pub/freetds/stable/freetds-stable.tgz
+  ;; ./configure --prefix=/usr/local/freetds --with-tdsver=8.0 --enable-msdblib
+  ;; vi /usr/local/freetds/etc/freetds.conf
+  ;;
+  ;; [global]
+  ;;    tds version = 8.0
+  ;;    client charset = UTF-8
+  ;;    text size = 64512
+  (let ((durl "ftp://ftp.freetds.org/pub/freetds/stable/freetds-stable.tgz")
+        (dpath (string-append archives-dir "/freetds-stable.tgz"))
+        (freetds-dir (string-append archives-dir "/freetds-0.91")))
+    (if (file-not-exists? dpath) (download durl dpath))
+    (run (tar -C ,archives-dir -xvf ,dpath))
+    (with-cwd freetds-dir
+              (run (./configure --with-tdsver=8.0 --enable-msdblib))
+              (root-run '(make install)))))
+
 (define (install-sys-pkg d od)
   (let ((len (length command-line-arguments))
         (pkgs (cdr command-line-arguments)))
@@ -29,5 +49,6 @@
     `(
       (phpbrew     -      " install phpbrew           "  ,install-phpbrew)
       (nvm         -      " install nvm               "  ,install-nvm)
+      (freetds     -      " install freetds           "  ,install-freetds)
       (--default   -      " default action            "  ,install-sys-pkg)
       (--help      -h     " bprint this usage message "  ,get-opt-usage))))

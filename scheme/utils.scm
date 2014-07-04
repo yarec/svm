@@ -98,6 +98,8 @@
 ;; shell util
 (define svm-dir   (string-append (home-dir) "/.svm"))
 (define svm-path  (if (file-exists? "/upg/svm") "/upg/svm" (string-append svm-dir "/src/svm")))
+(define archives-dir (string-append svm-dir "/archives/"))
+
 (define (out str) (display (string-append str "\n")))
 (define (cout str) (run (,(string-append svm-path "/shell/color.sh") ,str 3 1 1)) (display "\n"))
 (define (runcmd cmd)
