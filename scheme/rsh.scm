@@ -19,5 +19,5 @@
 (define (rsh data oret-data)
   (get-opt 
     `(
-      (--help         -h     " bprint this usage message "  ,get-opt-usage)
-      (--default      -      " default action            "  ,start-rsh))))
+      (--default      -      " default action            "  ,start-rsh)
+      (--help         -h     " bprint this usage message "  ,get-opt-usage))))

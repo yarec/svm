@@ -24,6 +24,6 @@
 (define (esh data oret-data)
   (get-opt 
     `(
-      (--help         -h     " bprint this usage message "  ,get-opt-usage)
       (--list         -l     " list cmds                 "  ,esh-list-cmds)
-      (--default      -      " default action            "  ,start-esh))))
+      (--default      -      " default action            "  ,start-esh)
+      (--help         -h     " bprint this usage message "  ,get-opt-usage))))

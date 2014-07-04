@@ -69,7 +69,7 @@
 (define (vim data oret-data)
   (get-opt 
     `(
-      (--help        -h  " vprint this usage message  " ,get-opt-usage)
       (--ins-vim     -|s " install vim                " ,install-vim-handler)
       (--init-rc     -c  " init vimrc                 " ,init-vimrc-handler)
-      (--default     -   " default action             " ,start-vim))))
+      (--default     -   " default action             " ,start-vim)
+      (--help        -h  " vprint this usage message  " ,get-opt-usage))))

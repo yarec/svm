@@ -15,6 +15,6 @@
 (define (os d od)
   (get-opt 
     `(
-      (--help         -h     " bprint this usage message "  ,get-opt-usage)
       (--init-links   -l     " init links : /upg /ws ... "  ,init-links)
-      (--default      -      " default action            "  ,init-links))))
+      (--default      -      " default action            "  ,init-links)
+      (--help         -h     " bprint this usage message "  ,get-opt-usage))))

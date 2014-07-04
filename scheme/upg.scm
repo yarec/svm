@@ -134,5 +134,5 @@ EOF
 (define (upg data oret-data)
   (get-opt 
     `(
-      (--help         -h     " bprint this usage message "  ,get-opt-usage)
-      (--default      -      " default action            "  ,start-upg))))
+      (--default      -      " default action            "  ,start-upg)
+      (--help         -h     " bprint this usage message "  ,get-opt-usage))))
