@@ -7,6 +7,7 @@
   ;; make install
   ;; extension="pdo_dblib.so" > php.ini
 
+  (run (svm --install rpmforge))
   (pkg-install '(php php-xml
                      bzip2-dev libxml2-dev libxslt-dev
                      libmcrypt libmcrypt-dev readline-dev

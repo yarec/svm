@@ -39,16 +39,30 @@
               (run (./configure --with-tdsver=8.0 --enable-msdblib))
               (root-run '(make install)))))
 
+;; RPM install
+(define (install-rpmforge d od)
+  (let ((grep-rpmforge (run/string (| (yum repolist --noplugins)
+                                      (grep rpmforge))))
+        (durl "http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm")
+        (dpath "/tmp/rpmforge.rpm"))
+    (if (string=? "" grep-rpmforge)
+      (begin 
+        (download durl dpath)
+        (root-run `(rpm -ivh ,dpath))))))
+
 (define (install-sys-pkg d od)
   (let ((len (length command-line-arguments))
         (pkgs (cdr command-line-arguments)))
-    (if (> len 1) (pkg-install pkgs))))
+    (if (> len 1) 
+     (pkg-install pkgs)
+     (get-opt-usage 0 0))))
 
 (define (install d od)
   (get-opt 
     `(
-      (phpbrew     -      " install phpbrew           "  ,install-phpbrew)
-      (nvm         -      " install nvm               "  ,install-nvm)
-      (freetds     -      " install freetds           "  ,install-freetds)
-      (--default   -      " default action            "  ,install-sys-pkg)
+      (phpbrew     -      "                           "  ,install-phpbrew)
+      (nvm         -      "                           "  ,install-nvm)
+      (freetds     -      "                           "  ,install-freetds)
+      (rpmforge    -      "                           "  ,install-rpmforge)
+      (--default   -      " install system pkg        "  ,install-sys-pkg)
       (--help      -h     " bprint this usage message "  ,get-opt-usage))))
