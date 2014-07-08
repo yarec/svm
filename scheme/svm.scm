@@ -16,6 +16,9 @@
 ;  (runcmd cmd)
   )
 
+(define (update d od)
+  (run (git -C ,(string-append (home-dir) "/.svm/src/svm/") pull)))
+
 (define (main)
   (let ((conf-file (string-append (home-dir) "/.svm/conf/svm-conf.scm")))
     (if (file-exists? conf-file) (load conf-file)))
@@ -36,7 +39,8 @@
       (--init-os -     " [os]    init os           " , os)
       (--lnmp    -     " [lnmp]  lnmp tool         " , lnmp)
       (--install -     " [ins]   install util tool " , install)
-      (--tmp     -t    " tmp misc                  " , tmp)
-      (--debug   -d|b  " debug                     " , tmp)
       (--default -     " default action            " , get-opt-usage)
+      (--update  -u    " self update               " , update)
+      (--debug   -d|b  " debug                     " , tmp)
+      (--tmp     -t    " tmp misc                  " , tmp)
       (--help    -h    " print this usage message  " , get-opt-usage))))
