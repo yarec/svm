@@ -20,6 +20,23 @@
     (run (chmod +x ,dpath))
     (root-run `(mv ,dpath "/usr/bin/ack"))))
 
+(define (install-docker d od)
+  (let ((install-docker-ubuntu 
+          (lambda ()
+            (let ((docker-install-url "https://get.docker.io/ubuntu/"))
+              (if (has-no-cmd "docker")
+                (run (| (curl ,docker-install-url) 
+                        (sh)))))))
+        (install-docker-centos 
+          (lambda ()
+            (run (svm --install epel))
+            (pkg-install '(docker-io)))))
+    (cond 
+      ((string=? os-type "debian\n") (install-docker-ubuntu))
+      ((string=? os-type "redhat\n") (install-docker-centos)))))
+
+
+
 ;; install libs from source
 (define (install-freetds d od)
   ;; freetds(conf: 8.0 utf8)
@@ -52,14 +69,14 @@
 
 ;; RPM install
 (define (install-rpmforge d od)
-  (let ((grep-rpmforge (run/string (| (yum repolist --noplugins)
-                                      (grep rpmforge))))
-        (durl "http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm")
-        (dpath "/tmp/rpmforge.rpm"))
-    (if (string=? "" grep-rpmforge)
-      (begin 
-        (download durl dpath)
-        (root-run `(rpm -ivh ,dpath))))))
+  (rpm-repo-install 
+    "rpmforge" 
+    "http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm"))
+
+(define (install-epel d od)
+  (rpm-repo-install 
+    "epel" 
+    "http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm"))
 
 (define (install-sys-pkg d od)
   (let ((len (length command-line-arguments))
@@ -74,6 +91,7 @@
       (phpbrew     -      "                           "  ,install-phpbrew)
       (nvm         -      "                           "  ,install-nvm)
       (ack         -      "                           "  ,install-ack)
+      (docker      -      "                           "  ,install-docker)
 
       ;libs 
       (freetds     -      "                           "  ,install-freetds)
@@ -81,6 +99,7 @@
 
       ;rpm
       (rpmforge    -      "                           "  ,install-rpmforge)
+      (epel        -      "                           "  ,install-epel)
 
       (--default   -      " install system pkg        "  ,install-sys-pkg)
       (--help      -h     " bprint this usage message "  ,get-opt-usage))))

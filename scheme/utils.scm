@@ -1,7 +1,11 @@
+(define svm-dir   (string-append (home-dir) "/.svm"))
+(define svm-path  (if (file-exists? "/upg/svm") "/upg/svm" (string-append svm-dir "/src/svm")))
+(define archives-dir (string-append svm-dir "/archives/"))
+(define os-type (run/string (,(string-append svm-path "/shell/oscheck"))))
+
 (define (is-root)
-  (let*
-    ((user-0 (user-info (getenv "USER")))
-     (user-id (user-info:uid user-0)))
+  (let* ((user-0 (user-info (getenv "USER")))
+         (user-id (user-info:uid user-0)))
     (if (eqv? user-id 0) #t #f)))
 
 (define (is-not-root) (not (is-root)))
@@ -22,8 +26,7 @@
 (define (has-no-cmd cmd) (not (has-cmd cmd)))
 
 (define (pkg-install pkg-name)
-  (let* ((os-type (run/string (,(string-append svm-path "/shell/oscheck"))))
-         (ins-cmd (lambda ()
+  (let* ((ins-cmd (lambda ()
                     (cond 
                       ((string=? os-type "debian\n") '(apt-get -q install ))
                       ((string=? os-type "redhat\n") '(yum -y install )))))
@@ -49,6 +52,15 @@
                           (run ,(append '(sudo) cmd))
                           (run ,cmd)))))))
     (run-ins pkg-name)))
+
+(define (rpm-repo-install name url)
+  (let ((grep-str (run/string (| (yum repolist --noplugins)
+                                 (grep ,name))))
+        (dpath "/tmp/tmp.rpm"))
+    (if (string=? "" grep-str)
+      (begin 
+        (download url dpath)
+        (root-run `(rpm -ivh ,dpath))))))
 
 ;; string utils
 (define (str-split str ch)
@@ -108,10 +120,6 @@
       ((symbol? name) (symbol->string name)))))
 
 ;; shell util
-(define svm-dir   (string-append (home-dir) "/.svm"))
-(define svm-path  (if (file-exists? "/upg/svm") "/upg/svm" (string-append svm-dir "/src/svm")))
-(define archives-dir (string-append svm-dir "/archives/"))
-
 (define (out str) (display (string-append str "\n")))
 (define (cout str) (run (,(string-append svm-path "/shell/color.sh") ,str 3 1 1)) (display "\n"))
 (define (runcmd cmd)
