@@ -11,13 +11,7 @@
     (if (has-no-cmd "nvm")
       (begin
         (run (| (curl ,nvm-install-url) 
-                (sh)))
-        (run (source /home/rt/.nvm/nvm.sh))
-;        (run (&& (cat /home/rt/.nvm/nvm.sh)
-;                 (sh -c "nvm current")))
-        )
-      )
-    ))
+                (sh)))))))
 
 (define (install-ack d od)
   (let ((durl "http://beyondgrep.com/ack-2.12-single-file")
