@@ -19,6 +19,13 @@
       )
     ))
 
+(define (install-ack d od)
+  (let ((durl "http://beyondgrep.com/ack-2.12-single-file")
+        (dpath "/tmp/ack"))
+    (download  durl dpath)
+    (run (chmod +x ,dpath))
+    (root-run `(mv ,dpath "/usr/bin/ack"))))
+
 ;; install libs from source
 (define (install-freetds d od)
   ;; freetds(conf: 8.0 utf8)
@@ -31,13 +38,23 @@
   ;;    client charset = UTF-8
   ;;    text size = 64512
   (let ((durl "ftp://ftp.freetds.org/pub/freetds/stable/freetds-stable.tgz")
-        (dpath (string-append archives-dir "/freetds-stable.tgz"))
-        (freetds-dir (string-append archives-dir "/freetds-0.91")))
-    (if (file-not-exists? dpath) (download durl dpath))
-    (run (tar -C ,archives-dir -xvf ,dpath))
-    (with-cwd freetds-dir
-              (run (./configure --with-tdsver=8.0 --enable-msdblib))
-              (root-run '(make install)))))
+        (file "freetds-stable.tgz")
+        (dir "freetds-0.91"))
+    (receive (fname rdir)
+             (get-src durl file dir)
+             (with-cwd rdir
+                       (run (./configure --with-tdsver=8.0 --enable-msdblib))
+                       (root-run '(make install))))))
+
+(define (install-openssl d od)
+  (let ((durl "http://www.openssl.org/source/openssl-1.0.1e.tar.gz")
+        (file "openssl-1.0.1e.tar.gz")
+        (dir "openssl-1.0.1e"))
+    (receive (fname rdir)
+             (get-src durl file dir)
+             (with-cwd rdir
+                       (run (./config no-asm shared))
+                       (root-run '(make install))))))
 
 ;; RPM install
 (define (install-rpmforge d od)
@@ -62,7 +79,14 @@
     `(
       (phpbrew     -      "                           "  ,install-phpbrew)
       (nvm         -      "                           "  ,install-nvm)
+      (ack         -      "                           "  ,install-ack)
+
+      ;libs 
       (freetds     -      "                           "  ,install-freetds)
+      (openssl     -      "                           "  ,install-openssl)
+
+      ;rpm
       (rpmforge    -      "                           "  ,install-rpmforge)
+
       (--default   -      " install system pkg        "  ,install-sys-pkg)
       (--help      -h     " bprint this usage message "  ,get-opt-usage))))

@@ -75,9 +75,21 @@
 
 ;; net utils
 ;;
-(define (download url fname)
-  (run (curl -kL ,url) 
-       (> 1 ,fname)))
+(define (download durl abs-fname)
+  (if (file-not-exists? abs-fname) 
+    (begin 
+      (cout (string-append "get from : " durl))
+      (run (curl -o ,abs-fname --progress-bar -kL ,durl) 
+           (= 2 1)))
+    (out (string-append abs-fname " exists!"))))
+
+(define (get-src durl file dir)
+  (let ((fname (string-append archives-dir file))
+        (dir (string-append archives-dir dir)))
+    (download durl fname)
+    (run (tar -C ,archives-dir -xvf ,fname)
+         (> 1 /dev/null))
+    (values fname dir)))
 
 (define (git-clone src dir)
   (if (file-not-exists? dir)

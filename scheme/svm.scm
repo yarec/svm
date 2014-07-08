@@ -5,9 +5,8 @@
   ;(display (home-dir))
   ;(display (is-not-root))
 
-  (pkg-install "ncurses-dev")
-  ;(display (has-cmd "node"))
-
+  ;(pkg-install "ncurses-dev")
+  (display (has-cmd "node"))
 
 ;  (define cmd '(run (| (ls -a1 ".")
 ;                       (awk "NR>2{print}")
