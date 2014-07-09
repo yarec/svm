@@ -42,6 +42,7 @@
 
       (nvm  (run (| (curl -L https://raw.githubusercontent.com/creationix/nvm/v0.8.0/install.sh)
                     (sh))))
+      (sethduuid (run (VBoxManage internalcommands sethduuid ,(get-arg-2nd))))
 
       (test1 ))))
 

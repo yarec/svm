@@ -4,6 +4,11 @@
     (if (>= len 2)
       (cadr command-line-arguments) "")))
 
+(define (get-arg-3rd)
+  (let ((len (length command-line-arguments)))
+    (if (>= len 3)
+      (caddr command-line-arguments) "")))
+
 (define get-opt-desc-opts #f)
 
 (define-record-type oret :oret
@@ -15,8 +20,7 @@
   (ismode oret:ismode set-oret!:ismode)
   (name oret:name set-oret!:name)
   (handler oret:handler set-oret!:handler)
-  (opt oret:opt set-oret!:opt)
-  )
+  (opt oret:opt set-oret!:opt))
 
 (define (get-opt-usage data oret-list)
   (let ((ls '())
@@ -34,8 +38,7 @@
                (len (string-length line)))
           (set! ls (cons (cons line desc) ls))
           (if (> len max-len)
-            (set! max-len len))
-          ))
+            (set! max-len len))))
       get-opt-desc-opts)
     (for-each 
       (lambda (l)
@@ -51,12 +54,8 @@
           (display line)
           (out-blank len)
           (display desc)
-          (display "\n")
-          )
-        ) 
-      (reverse ls))
-    )
-  )
+          (display "\n"))) 
+      (reverse ls))))
 
 (define (get-opt-parse args desc-opts)
   (let ((match-list '())
@@ -78,8 +77,7 @@
                      (ismode (cond ((equal? arg-length 1) #t)
                                    ((equal? arg-length 2) #f)
                                    ((equal? arg-length 3) 
-                                    (if (equal? (caddr short-name-pair) "t") #t #f))
-                                   ))
+                                    (if (equal? (caddr short-name-pair) "t") #t #f))))
                      (desc (caddr desc-opt))
                      (handler (cadddr desc-opt))
                      (ok (if (or (equal? arg-name arg)
@@ -102,8 +100,7 @@
                                   (begin
                                     (set! mode vals)
                                     (set! match-list (cons vals match-list))))
-                                (set! match-list (cons vals match-list)))
-                              ))))
+                                (set! match-list (cons vals match-list)))))))
             get-opt-desc-opts))
         (if (not (null? rest))
           (lp rest))))
