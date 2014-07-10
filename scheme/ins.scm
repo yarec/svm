@@ -35,6 +35,16 @@
       ((string=? os-type "debian\n") (install-docker-ubuntu))
       ((string=? os-type "redhat\n") (install-docker-centos)))))
 
+(define (install-petite d od)
+  (let ((durl "http://scheme.com/download/pcsv8.4-ta6le.tar.gz")
+        (file "pcsv8.4-ta6le.tar.gz")
+        (dir "csv8.4/custom"))
+    (if (has-no-cmd "petite")
+      (receive (fname rdir)
+               (get-src durl file dir)
+               (with-cwd rdir
+                         (run (./configure))
+                         (root-run '(make install)))))))
 
 
 ;; install libs from source
@@ -92,6 +102,7 @@
       (nvm         -      "                           "  ,install-nvm)
       (ack         -      "                           "  ,install-ack)
       (docker      -      "                           "  ,install-docker)
+      (petite      -      "                           "  ,install-petite)
 
       ;libs 
       (freetds     -      "                           "  ,install-freetds)

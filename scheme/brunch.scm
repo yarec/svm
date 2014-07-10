@@ -4,6 +4,10 @@
     (run (brunch new gh:mutewinter/tapas-with-ember ,appname))))
 
 (define (install-pkg data oret-data)
+  (if (has-no-cmd "bower")
+    (run  (npm install -g bower)))
+  (if (has-no-cmd "brunch")
+    (run  (npm install -g brunch)))
   (run  (npm install))
   (run (bower install)))
 
