@@ -20,10 +20,23 @@
               (cout (car x)))
             (get-esh-cmds)))
 
+(define (bakup-mdb d od)
+  (let* ((dir "/rt/bakup/")
+         (dir1 (string-append dir (substring (run/string (date +%Y%m%d)) 0 8)))
+         (tar_name (string-append dir1 ".tgz"))
+         (host (get-argn 3))
+         (db (get-argn 4))
+         (user (get-argn 5))
+         (pwd (get-argn 6)))
+    (if (file-not-exists? dir) 
+      (run (mkdir -p ,dir)))
+    (run (mongodump -h ,host -d ,db -u ,user -p ,pwd -o ,dir1))
+    (run (tar cvzf ,tar_name ,dir1))))
 
 (define (esh data oret-data)
   (get-opt 
     `(
       (--list         -l     " list cmds                 "  ,esh-list-cmds)
+      (--backup-mdb   -      " backup mangolab db        "  ,bakup-mdb)
       (--default      -      " default action            "  ,start-esh)
       (--help         -h     " bprint this usage message "  ,get-opt-usage))))
