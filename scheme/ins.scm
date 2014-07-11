@@ -78,6 +78,7 @@
                        (root-run '(make install))))))
 
 ;; RPM install
+;; http://mirrors.163.com/.help/CentOS6-Base-163.repo
 (define (install-rpmforge d od)
   (rpm-repo-install 
     "rpmforge" 
@@ -87,6 +88,25 @@
   (rpm-repo-install 
     "epel" 
     "http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm"))
+
+(define (install-cm d od)
+  (let ((repo-dir "/big/hadoop/")
+        (html-dir "/usr/share/nginx/html/")
+        (n (get-arg-3rd)))
+    (if (string=? "" n)
+      (cout "arg1(ip number) need!")
+      (begin
+        (if (file-not-exists? (string-append html-dir "/cdh5"))
+          (with-cwd html-dir
+                    (root-run `(ln -s ,(string-append repo-dir "/cdh/5") "cdh5"))
+                    (root-run `(ln -s ,(string-append repo-dir "/cm/5") "cm5"))
+                    (run (mkdir -p cm5/redhat/6/x86_64))
+                    (root-run `(ln -s ,(string-append repo-dir "/cm") "cm5/redhat/6/x86_64/cm"))))
+
+        (run (ssh ,(string-append "root@192.168.1." n)) 
+             (< ,(string-append svm-path "/shell/cm_cfg_centos.sh"))
+             (= 2 1))))))
+
 
 (define (install-sys-pkg d od)
   (let ((len (length command-line-arguments))
@@ -103,6 +123,7 @@
       (ack         -      "                           "  ,install-ack)
       (docker      -      "                           "  ,install-docker)
       (petite      -      "                           "  ,install-petite)
+      (cm          -      "                           "  ,install-cm)
 
       ;libs 
       (freetds     -      "                           "  ,install-freetds)

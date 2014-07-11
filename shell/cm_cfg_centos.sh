@@ -1,5 +1,6 @@
 ################
 # global conf
+hostno=212
 repo=130
 hosts=(211 212 213 214 215 216)
 ipre=192.168.1
@@ -31,7 +32,7 @@ EOF
  
 cat > /etc/hosts << EOF
 127.0.0.1       localhost
-$ipre.$repo repo
+$ipre.$repo repo.com
 $ipre.$repo archive.cloudera.com
 EOF
  
@@ -47,7 +48,7 @@ conf_yum() {
 rm /etc/yum.repos.d/*
 cat > /etc/yum.repos.d/local.repo << "EOF"
 [local-centos]
-baseurl=http://repo/centos
+baseurl=http://repo.com/centos
 gpgcheck=0
 EOF
 }
@@ -64,22 +65,12 @@ fi
  
 #################
 # main script
-hostno=$1
 
-hostno=216
+turnoff_se
+conf_yum
+conf_net $hostno
 
-if [ -z "$hostno" ]; then
-    echo 'a host no needed!'
-else
-    turnoff_se
-    conf_yum
-    conf_net $hostno
- 
-    yum -y install perl openssh-clients postgresql-server bind-utils libxslt cyrus-sasl-gssapi parted vim wget
+yum -y install perl openssh-clients postgresql-server bind-utils libxslt cyrus-sasl-gssapi parted vim wget
+if [ -e /usr/bin/host ]; then
     mv /usr/bin/host /usr/bin/host.bak
- 
-    #wget http://repo/cmi.bin
-    #chmod +x cmi.bin
-    #echo './cmi.bin --skip_repo_package=1' > inscm
-    #chmod +x inscm
 fi
