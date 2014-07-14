@@ -1,10 +1,20 @@
-(define (install-phpbrew d od)
-  (let ((tmp-phpbrew "/tmp/phpbrew"))
-    (run (curl -kL "https://raw.github.com/c9s/phpbrew/master/phpbrew") 
-         (> 1 ,tmp-phpbrew))
-    (run (chmod +x ,tmp-phpbrew))
-    (root-run `(mv ,tmp-phpbrew /usr/bin/phpbrew))
-    (run (phpbrew init))))
+(define (install-lein d od)
+  (let ((tmp-file"/tmp/lein"))
+    (run (curl -kL "https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein") 
+         (> 1 ,tmp-file))
+    (run (chmod +x ,tmp-file))
+    (root-run `(mv ,tmp-file /usr/bin/lein))))
+
+(define (install-petite d od)
+  (let ((durl "http://scheme.com/download/pcsv8.4-ta6le.tar.gz")
+        (file "pcsv8.4-ta6le.tar.gz")
+        (dir "csv8.4/custom"))
+    (if (has-no-cmd "petite")
+      (receive (fname rdir)
+               (get-src durl file dir)
+               (with-cwd rdir
+                         (run (./configure))
+                         (root-run '(make install)))))))
 
 (define (install-nvm d od)
   (let* ((nvm-install-url "https://raw.githubusercontent.com/creationix/nvm/v0.7.0/install.sh"))
@@ -12,6 +22,14 @@
       (begin
         (run (| (curl ,nvm-install-url) 
                 (sh)))))))
+
+(define (install-phpbrew d od)
+  (let ((tmp-phpbrew "/tmp/phpbrew"))
+    (run (curl -kL "https://raw.github.com/c9s/phpbrew/master/phpbrew") 
+         (> 1 ,tmp-phpbrew))
+    (run (chmod +x ,tmp-phpbrew))
+    (root-run `(mv ,tmp-phpbrew /usr/bin/phpbrew))
+    (run (phpbrew init))))
 
 (define (install-ack d od)
   (let ((durl "http://beyondgrep.com/ack-2.12-single-file")
@@ -35,16 +53,6 @@
       ((string=? os-type "debian\n") (install-docker-ubuntu))
       ((string=? os-type "redhat\n") (install-docker-centos)))))
 
-(define (install-petite d od)
-  (let ((durl "http://scheme.com/download/pcsv8.4-ta6le.tar.gz")
-        (file "pcsv8.4-ta6le.tar.gz")
-        (dir "csv8.4/custom"))
-    (if (has-no-cmd "petite")
-      (receive (fname rdir)
-               (get-src durl file dir)
-               (with-cwd rdir
-                         (run (./configure))
-                         (root-run '(make install)))))))
 
 
 ;; install libs from source
@@ -118,20 +126,22 @@
 (define (install d od)
   (get-opt 
     `(
-      (phpbrew     -      "                           "  ,install-phpbrew)
+      (lein        -      "                           "  ,install-lein)
+      (petite      -      "                           "  ,install-petite)
       (nvm         -      "                           "  ,install-nvm)
+      (phpbrew     -      "                           "  ,install-phpbrew)
+      (----------- -      "                           "  ,-)
       (ack         -      "                           "  ,install-ack)
       (docker      -      "                           "  ,install-docker)
-      (petite      -      "                           "  ,install-petite)
       (cm          -      "                           "  ,install-cm)
-
+      (----------- -      "                           "  ,-)
       ;libs 
       (freetds     -      "                           "  ,install-freetds)
       (openssl     -      "                           "  ,install-openssl)
-
+      (----------- -      "                           "  ,-)
       ;rpm
       (rpmforge    -      "                           "  ,install-rpmforge)
       (epel        -      "                           "  ,install-epel)
-
+      (----------- -      "                           "  ,-)
       (--default   -      " install system pkg        "  ,install-sys-pkg)
       (--help      -h     " bprint this usage message "  ,get-opt-usage))))
