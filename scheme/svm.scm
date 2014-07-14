@@ -6,7 +6,8 @@
   ;(display (is-not-root))
 
   ;(pkg-install "ncurses-dev")
-  (display (has-cmd "node"))
+  ;(display (has-cmd "node"))
+  (display (get-argsn 3))
 
 ;  (define cmd '(run (| (ls -a1 ".")
 ;                       (awk "NR>2{print}")
@@ -32,6 +33,7 @@
 
       (--vim     -     " [vv]    vim               " , vim)
       (--brunch  -     " [bh]    for brunch        " , brunch)
+      (--luminus -     " [lum]   for luminus       " , luminus)
       (--rsh     -     " [rsh]   ssh login         " , rsh)
       (--esh     -     " [esh]   exec shell        " , esh)
       (--upg     -     " [upg]   upg manage        " , upg)

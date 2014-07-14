@@ -87,19 +87,22 @@
 
 ;; net utils
 ;;
-(define (download durl abs-fname)
-  (if (file-not-exists? abs-fname) 
+(define (download1 durl abs-fname f)
+  (if (or (file-not-exists? abs-fname) f)
     (begin 
       (cout (string-append "get from : " durl))
       (run (curl -o ,abs-fname --progress-bar -kL ,durl) 
            (= 2 1)))
     (out (string-append abs-fname " exists!"))))
 
+(define (download durl abs-fname)
+  (download1 durl abs-fname #f))
+
 (define (get-src durl file dir)
   (let ((fname (string-append archives-dir file))
         (dir (string-append archives-dir dir)))
     (download durl fname)
-    (run (tar -C ,archives-dir -xvf ,fname)
+    (run (bash ,(string-append svm-path "/shell/extract") ,fname ,archives-dir)
          (> 1 /dev/null))
     (values fname dir)))
 

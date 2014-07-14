@@ -3,23 +3,36 @@
 # Description: extracts archived files / mounts disk images
 # Note: .dmg/hdiutil is Mac OS X-specific.
 #extract () {
+    cmd=''
     if [ -f $1 ]; then
         case $1 in
-            *.tar.bz2)  tar -jxvf $1                        ;;
-            *.tar.gz)   tar -zxvf $1                        ;;
-            *.bz2)      bunzip2 $1                          ;;
-            *.dmg)      hdiutil mount $1                    ;;
-            *.gz)       gunzip $1                           ;;
-            *.tar)      tar -xvf $1                         ;;
-            *.tbz2)     tar -jxvf $1                        ;;
-            *.tgz)      tar -zxvf $1                        ;;
-            *.zip)      unzip $1                            ;;
-            *.ZIP)      unzip $1                            ;;
-            *.pax)      cat $1 | pax -r                     ;;
-            *.pax.Z)    uncompress $1 --stdout | pax -r     ;;
-            *.Z)        uncompress $1                       ;;
+            *.tar.bz2)  cmd="tar -jxvf $1"                        ;;
+            *.tar.gz)   cmd="tar -zxvf $1"                        ;;
+            *.tar)      cmd="tar -xvf $1 "                        ;;
+            *.tbz2)     cmd="tar -jxvf $1"                        ;;
+            *.tgz)      cmd="tar -zxvf $1"                        ;;
+            *.zip)      cmd="unzip $1    "                        ;;
+            *.ZIP)      cmd="unzip $1    "                        ;;
+            *.bz2)      cmd="bunzip2 $1  "                        ;;
+            *.dmg)      cmd="hdiutil mount $1"                    ;;
+            *.gz)       cmd="gunzip $1"                           ;;
+            *.pax)      cmd="cat $1 | pax -r"                     ;;
+            *.pax.Z)    cmd="uncompress $1 --stdout | pax -r"     ;;
+            *.Z)        cmd="uncompress $1"                       ;;
             *)          echo "'$1' cannot be extracted/mounted via extract()" ;;
         esac
+
+        if [ -z "$cmd" ]; then exit; fi
+
+        if [ ! -z "$2" ]; then 
+            case $cmd in
+                tar*) cmd="$cmd -C $2"  ;;
+                unzip*) cmd="$cmd -d $2"  ;;
+                *)    echo 'nn'         ;;
+            esac
+        fi
+
+        $cmd
     else
         echo "'$1' is not a valid file"
     fi

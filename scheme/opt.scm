@@ -21,6 +21,19 @@
         ((equal? n 7) (cadddr (cdddr command-line-arguments))))
       "")))
 
+(define (get-argsn n)
+  (let ((len (length command-line-arguments)))
+    (if (>= len n)
+      (cond 
+        ((equal? n 2) (cddr command-line-arguments))
+        ((equal? n 3) (cdddr command-line-arguments))
+        ((equal? n 4) (cddddr command-line-arguments))
+        )
+      '()
+      )
+    )
+  )
+
 (define get-opt-desc-opts #f)
 
 (define-record-type oret :oret

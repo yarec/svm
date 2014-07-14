@@ -31,6 +31,17 @@
     (root-run `(mv ,tmp-phpbrew /usr/bin/phpbrew))
     (run (phpbrew init))))
 
+(define (install-cv d od)
+  (let ((durl "https://github.com/Xfennec/cv/archive/master.zip")
+        (file "cv-master.zip")
+        (dir "cv-master"))
+    (if (has-no-cmd "cv")
+      (receive (fname rdir)
+               (get-src durl file dir)
+               (with-cwd rdir
+                         (run (make))
+                         (root-run '(make install)))))))
+
 (define (install-ack d od)
   (let ((durl "http://beyondgrep.com/ack-2.12-single-file")
         (dpath "/tmp/ack"))
@@ -132,6 +143,7 @@
       (phpbrew     -      "                           "  ,install-phpbrew)
       (----------- -      "                           "  ,-)
       (ack         -      "                           "  ,install-ack)
+      (cv          -      "                           "  ,install-cv)
       (docker      -      "                           "  ,install-docker)
       (cm          -      "                           "  ,install-cm)
       (----------- -      "                           "  ,-)
