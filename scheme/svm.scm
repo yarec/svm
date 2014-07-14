@@ -31,6 +31,7 @@
       ;      (--t4 -t4|s|t "  s|t #t "  ,get-opt-usage)
       ;      (--t5 -t5|s|f "  s|f #f "  ,get-opt-usage)
 
+      (--emacs   -     " [em]    emacs             " , emacs)
       (--vim     -     " [vv]    vim               " , vim)
       (--brunch  -     " [bh]    for brunch        " , brunch)
       (--luminus -     " [lum]   for luminus       " , luminus)
