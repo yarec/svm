@@ -31,6 +31,13 @@
     (root-run `(mv ,tmp-phpbrew /usr/bin/phpbrew))
     (run (phpbrew init))))
 
+(define (install-composer d od)
+  (let ((tmp-file"/tmp/composer"))
+    (run (curl -kL "https://getcomposer.org/installer") 
+         (> 1 ,tmp-file))
+    (run (php ,tmp-file))
+    (root-run `(mv "composer.phar" /usr/bin/composer))))
+
 (define (install-cv d od)
   (let ((durl "https://github.com/Xfennec/cv/archive/master.zip")
         (file "cv-master.zip")
@@ -141,6 +148,7 @@
       (petite      -      "                           "  ,install-petite)
       (nvm         -      "                           "  ,install-nvm)
       (phpbrew     -      "                           "  ,install-phpbrew)
+      (composer    -      "                           "  ,install-composer)
       (----------- -      "                           "  ,-)
       (ack         -      "                           "  ,install-ack)
       (cv          -      "                           "  ,install-cv)
