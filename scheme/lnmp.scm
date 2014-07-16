@@ -7,10 +7,16 @@
   ;; make install
   ;; extension="pdo_dblib.so" > php.ini
 
-  (run (svm --install rpmforge))
+  (if (string=? os-type "redhat")
+    (run (svm --install rpmforge)))
+  
   (pkg-install '(php php-xml
                      bzip2-dev libxml2-dev libxslt-dev
                      libmcrypt libmcrypt-dev readline-dev
+                     openssl-dev
+
+                     libreadline-dev
+
                      libmemcached))
   (run (svm --install phpbrew))
   (run (phpbrew install 5.5.14 

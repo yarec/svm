@@ -13,6 +13,7 @@
   (let ((len (length command-line-arguments)))
     (if (>= len n)
       (cond 
+        ((equal? n 1) (car command-line-arguments))
         ((equal? n 2) (cadr command-line-arguments))
         ((equal? n 3) (caddr command-line-arguments))
         ((equal? n 4) (cadddr command-line-arguments))
@@ -48,6 +49,10 @@
   (opt oret:opt set-oret!:opt))
 
 (define (get-opt-usage data oret-list)
+  (cout (string-append 
+         "--------------\n"
+         " | options for " (if (string=? (get-argn 1) "") "svm" (get-argn 1)) ":\n"
+         "--------------"))
   (let ((ls '())
         (max-len 0))
     (for-each 
@@ -56,6 +61,7 @@
                (short-name (car (str-split (symbol->string (cadr opt)) #\|)))
                (desc (caddr opt))
                (line (string-append 
+                      "  "
                        (if (not (equal? short-name "-"))
                          (string-append short-name " ")
                          "")
