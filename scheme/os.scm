@@ -5,6 +5,7 @@
                     "/"))
             '(upg ws app dld vcs))
   ;; dotfiles
+  (git-clone "https://github.com/yarec/dotfiles" "/upg/dotfiles")
   (for-each (lambda (x)
               (f-ln (string-append "/upg/dotfiles/" (symbol->string x)) 
                     (string-append (home-dir) "/." (symbol->string x))))

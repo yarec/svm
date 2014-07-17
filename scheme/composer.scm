@@ -1,10 +1,15 @@
 (define (new-yii2 d od)
   (let* ((value (oret:value d)) 
          (appname (if (string=? value "") "yiiapp" value))
-         (tpl (if (string=? (get-argn 4) "") "basic" "advanced")))
+         (arg4 (get-argn 4))
+         (tpl (if (string=? arg4 "") "basic" arg4))
+         (full-tpl 
+           (cond ((or (string=? tpl "basic") (string=? tpl "advanced")) (string-append "yiisoft/yii2-app-" tpl))
+                 (else (string-append "yarec/yii2-app-" tpl)))))
     (run (composer create-project --prefer-dist 
                    --stability=dev 
-                   ,(string-append "yiisoft/yii2-app-" tpl) ,appname))))
+                   ,full-tpl ,appname)
+         (= 2 1))))
 
 (define (install-pkg d od)
   (run (composer install)))

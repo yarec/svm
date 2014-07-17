@@ -1,2 +1,2 @@
-svm --os $*
+svm --init-os $*
 

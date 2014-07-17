@@ -31,6 +31,9 @@
         root /opt/app/;
         index index.php index.html index.htm;
 
+        location / {
+            try_files $uri $uri/ /index.php?$args;
+        }
         location ~ \.php$ {
             fastcgi_pass   127.0.0.1:9000;
             fastcgi_index  index.php;
