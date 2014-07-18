@@ -17,8 +17,8 @@
 (define (composer d od)
   (get-opt 
     `(
-      (--new-yii2     -y|s|t " new yii2 app              "  ,new-yii2)
-      (--ins-pkg      -i|    " install deps              "  ,install-pkg)
-      (--debug        -d||f  " debug                     "  #f)
-      (--default      -      " default action            "  ,get-opt-usage)
-      (--help         -h     " bprint this usage message "  ,get-opt-usage))))
+      (--new-yii2     -y|s|t " new yii2 app ex: phc -y app rest "  , new-yii2)
+      (--ins-pkg      -i|    " install deps                     "  , install-pkg)
+      (--debug        -d||f  " debug                            "    #f)
+      (--default      -      " default action                   "  , get-opt-usage)
+      (--help         -h     " bprint this usage message        "  , get-opt-usage))))
