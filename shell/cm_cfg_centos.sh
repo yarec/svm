@@ -1,9 +1,17 @@
+#!/bin/bash
 ################
 # global conf
-hostno=212
-repo=130
-hosts=(211 212 213 214 215 216)
-ipre=192.168.1
+: ${hostno:=211}
+: ${repo:=130}
+: ${hosts:=(211 212 213 214 215 216)}
+: ${ipre:=192.168.1}
+echo " init os with: "
+echo "----------------"
+echo "  ipre  : $ipre   "
+echo "  hostno: $hostno "
+echo "  hosts : $hosts  "
+echo "  repo  : $repo   "
+echo "----------------"
  
 ################
 # network conf

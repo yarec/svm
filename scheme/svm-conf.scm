@@ -44,6 +44,22 @@
                     (sh))))
       (sethduuid (run (VBoxManage internalcommands sethduuid ,(get-arg-2nd))))
 
+      (tsvm (run (cat funcs/common.sh funcs/git.sh funcs/scsh.sh funcs/install-main.sh)
+                 (> /upg/svm/install.sh))
+            (scp -r /upg/svm root@192.168.1.163:/upg/)
+            (run (ssh root@192.168.1.163 ) (< /upg/svm/install.sh))
+            ;(run (ssh root@192.168.1.167 "/upg/svm/bin/lnmp") )
+            )
+
+      (cm (run (| (cat /upg/svm/shell/cm_cfg_centos.sh)
+                  ;(head -n 17)
+                  ;(cat)
+                  (sed ,(string-append "4s/^.*$/hostno=" (if (string=? (get-argn 3) "") (if (not (getenv "hostno")) "211" (getenv "hostno")) (get-argn 3)) "/"))
+                  (sed ,(string-append "5s/^.*$/repo=" (if (not (getenv "repo")) "130" (getenv "repo")) "/"))
+                  (sed ,(string-append "6s/^.*$/hosts=" (if (not (getenv "hosts")) "(211 212 213 214 215 216 217)" (getenv "hosts")) "/"))
+                  (sed ,(string-append "7s/^.*$/ipre=" (if (not (getenv "ipre")) "192.168.1" (getenv "ipre")) "/"))
+                  (ssh ,(string-append "root@" (if (not (getenv "dest")) "192.168.1.211" (getenv "dest"))))
+                  )))
       (test1 ))))
 
 
