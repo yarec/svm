@@ -156,19 +156,20 @@
 ;;         authz-db = authz
 ;;         realm = /opt/svn/repos
 (define (install-svnserve d od)
-  (root-run '(rm -rf /opt/svn))
-  (root-run '(rm -rf /tmp/svntmp))
+  ;(root-run '(rm -rf /opt/svn))
+  ;(root-run '(rm -rf /tmp/svntmp))
 
-  (let ((repo-dir "/opt/svn/repos"))
+  (let* ((repo-dir "/opt/svn/repos")
+         (repo-conf-dir (string-append repo-dir "/conf")))
     (root-run `(mkdir -p ,repo-dir))
-    (if (file-not-exists? (string-append repo-dir "/conf"))
+    (if (file-not-exists? repo-conf-dir)
       (let ((svn-tmp "/tmp/svntmp/"))
         (run (mkdir -p ,svn-tmp))
         (with-cwd svn-tmp (run (| (mkdir -p "master")
                                   (mkdir -p "fixbug")
                                   (mkdir -p "dev"))))
         (root-run '(svnadmin create --fs-type fsfs /opt/svn/repos))
-        (run (cp -rf ,(string-append repo-dir "/conf") /tmp))
+        (run (cp -rf ,repo-conf-dir /tmp))
 
         (run (bash -c #<<EOF
                    echo hello=123              >> /tmp/conf/passwd
@@ -182,9 +183,11 @@
                    echo realm = /opt/svn/repos >> /tmp/conf/svnserve.conf
 EOF
                    ))
+        (root-run `(cp -rvf /tmp/conf/passwd        ,repo-conf-dir))
+        (root-run `(cp -rvf /tmp/conf/authz         ,repo-conf-dir))
+        (root-run `(cp -rvf /tmp/conf/svnserve.conf ,repo-conf-dir))
         (run (svnserve -d -r /opt/svn/repos --listen-port 8899))
-        (root-run `(svn import ,svn-tmp ,(string-append "file://" repo-dir) -m "init"))
-        ))))
+        (root-run `(svn import ,svn-tmp ,(string-append "file://" repo-dir) -m "init"))))))
 
 
 (define (install-sys-pkg d od)
