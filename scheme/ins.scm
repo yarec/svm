@@ -136,13 +136,63 @@
              (< ,(string-append svm-path "/shell/cm_cfg_centos.sh"))
              (= 2 1))))))
 
+;; mkdir /opt/svn/repos
+;; svnadmin create --fs-type fsfs /opt/svn/repos 
+;; svnserve -d -r /opt/svn/repos --listen-port 3391
+;; config :
+;;     passwd
+;;         [users]
+;;         # harry = harryssecret
+;;         # sally = sallyssecret
+;;         hello=123
+;;     authz
+;;         [/]
+;;         hello= rw
+;;
+;;     svnserve.conf
+;;         anon-access = none
+;;         auth-access = write
+;;         password-db = password
+;;         authz-db = authz
+;;         realm = /opt/svn/repos
+(define (install-svnserve d od)
+  (root-run '(rm -rf /opt/svn))
+  (root-run '(rm -rf /tmp/svntmp))
+
+  (let ((repo-dir "/opt/svn/repos"))
+    (root-run `(mkdir -p ,repo-dir))
+    (if (file-not-exists? (string-append repo-dir "/conf"))
+      (let ((svn-tmp "/tmp/svntmp/"))
+        (run (mkdir -p ,svn-tmp))
+        (with-cwd svn-tmp (run (| (mkdir -p "master")
+                                  (mkdir -p "fixbug")
+                                  (mkdir -p "dev"))))
+        (root-run '(svnadmin create --fs-type fsfs /opt/svn/repos))
+        (run (cp -rf ,(string-append repo-dir "/conf") /tmp))
+
+        (run (bash -c #<<EOF
+                   echo hello=123              >> /tmp/conf/passwd
+                   echo [/]                    >> /tmp/conf/authz
+                   echo hello= rw              >> /tmp/conf/authz
+                   echo [general]               > /tmp/conf/svnserve.conf
+                   echo anon-access = none     >> /tmp/conf/svnserve.conf
+                   echo auth-access = write    >> /tmp/conf/svnserve.conf
+                   echo password-db = password >> /tmp/conf/svnserve.conf
+                   echo authz-db = authz       >> /tmp/conf/svnserve.conf
+                   echo realm = /opt/svn/repos >> /tmp/conf/svnserve.conf
+EOF
+                   ))
+        (run (svnserve -d -r /opt/svn/repos --listen-port 8899))
+        (root-run `(svn import ,svn-tmp ,(string-append "file://" repo-dir) -m "init"))
+        ))))
+
 
 (define (install-sys-pkg d od)
   (let ((len (length command-line-arguments))
         (pkgs (cdr command-line-arguments)))
     (if (> len 1) 
-     (pkg-install pkgs)
-     (get-opt-usage 0 0))))
+      (pkg-install pkgs)
+      (get-opt-usage 0 0))))
 
 (define (install d od)
   (get-opt 
@@ -165,6 +215,8 @@
       ;rpm
       (rpmforge    -      "                           "  ,install-rpmforge)
       (epel        -      "                           "  ,install-epel)
+      (----------- -      "                           "  ,-)
+      (svnserve    -      "                           "  ,install-svnserve)
       (----------- -      "                           "  ,-)
       (--default   -      " install system pkg        "  ,install-sys-pkg)
       (--help      -h     " bprint this usage message "  ,get-opt-usage))))
