@@ -178,7 +178,7 @@
                    echo [general]               > /tmp/conf/svnserve.conf
                    echo anon-access = none     >> /tmp/conf/svnserve.conf
                    echo auth-access = write    >> /tmp/conf/svnserve.conf
-                   echo password-db = password >> /tmp/conf/svnserve.conf
+                   echo password-db = passwd   >> /tmp/conf/svnserve.conf
                    echo authz-db = authz       >> /tmp/conf/svnserve.conf
                    echo realm = /opt/svn/repos >> /tmp/conf/svnserve.conf
 EOF
