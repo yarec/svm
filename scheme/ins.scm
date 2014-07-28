@@ -103,6 +103,16 @@
                        (run (./config no-asm shared))
                        (root-run '(make install))))))
 
+(define (install-pcre d od)
+  (let ((durl "http://jaist.dl.sourceforge.net/project/pcre/pcre/8.35/pcre-8.35.tar.gz")
+        (file "pcre-8.35.tar.gz")
+        (dir "pcre-8.35"))
+    (receive (fname rdir)
+             (get-src durl file dir)
+             (with-cwd rdir
+                       (run (./configure --prefix=/usr --enable-utf8 --enable-unicode-properties))
+                       (root-run '(make install))))))
+
 ;; ftp://ftp.cwru.edu/pub/bash/readline-6.3.tar.gz
 ;; http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
 
@@ -214,6 +224,7 @@ EOF
       ;libs 
       (freetds     -      "                           "  ,install-freetds)
       (openssl     -      "                           "  ,install-openssl)
+      (pcre        -      "                           "  ,install-pcre)
       (----------- -      "                           "  ,-)
       ;rpm
       (rpmforge    -      "                           "  ,install-rpmforge)
