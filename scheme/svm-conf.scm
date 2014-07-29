@@ -21,6 +21,11 @@
       (le  (less  ,(string-append (home-dir) "/.svm/log/error.log")))
       (tne (tailf "/var/log/nginx/error.log"))
 
+      (genp (run (| (cat /dev/urandom)
+                    (tr -dc "_A-Z-a-z-0-9\\+\\~\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)")
+                    (fold -w 12)
+                    (head -n 10))))
+
       (du  (run (| (ls -a1)
                    (awk "NR>2{print}")
                    (xargs -Iitem du -sh item)
