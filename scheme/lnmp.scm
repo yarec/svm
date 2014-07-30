@@ -47,6 +47,10 @@ EOF
   ;exts memcache memcached pdo_dblib
   )
 
+(define (install-php-imagick d od)
+  (run (yum install ImageMagick-devel)) 
+  (run (phpbrew ext install imagick)))
+
 (define (install-mariadb d od)
   (let ((durl "http://mirrors.hustunique.com/mariadb/mariadb-10.0.12/source/mariadb-10.0.12.tar.gz")
         (file "mariadb-10.0.12.tar.gz" )
@@ -66,7 +70,8 @@ EOF
 (define (lnmp d od)
   (get-opt 
     `(
-      (--ins-php      -p     " install php               "  ,install-php)
-      (--ins-mariadb  -m     " install mariadb           "  ,install-mariadb)
-      (--default      -      " default action            "  ,get-opt-usage)
+      (--ins-php              -p     " install php               "  ,install-php)
+      (--ins-php-imagick      -p     " install php ext imagick   "  ,install-php-imagick)
+      (--ins-mariadb          -m     " install mariadb           "  ,install-mariadb)
+      (--default              -      " default action            "  ,get-opt-usage)
       (--help         -h     " bprint this usage message "  ,get-opt-usage))))
