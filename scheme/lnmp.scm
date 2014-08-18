@@ -76,8 +76,8 @@ EOF
   (get-opt 
     `(
       (--ins-php              -p     " install php               "  ,install-php)
-      (--ins-php-imagick      -i     " install php ext imagick   "  ,install-php-imagick)
+      (--ins-imagick          -      " install php ext imagick   "  ,install-php-imagick)
       (--ins-cherokee         -c     " install cherokee          "  ,install-cherokee)
       (--ins-mariadb          -m     " install mariadb           "  ,install-mariadb)
       (--default              -      " default action            "  ,get-opt-usage)
-      (--help         -h     " bprint this usage message "  ,get-opt-usage))))
+      (--help                 -h     " bprint this usage message "  ,get-opt-usage))))
