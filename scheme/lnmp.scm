@@ -70,13 +70,35 @@ EOF
              (with-cwd rdir
                        (run (cmake "."))
                        (run (make))))))
+(define (install-nginx d od)
+  (let* ((durl "http://nginx.org/download/nginx-1.6.1.tar.gz")
+         (file "nginx-1.6.1.tar.gz" )
+         (dir "nginx-1.6.1")
+         (arg-3rd (get-arg-3rd))
+         (dist (if (string=? "" arg-3rd) 
+                 (string-append svm-dist "/nginx")
+                 arg-3rd))
+         (prefix (string-append "--prefix=" dist))
+         )
 
+    (run (mkdir -p ,dist))
+
+    (pkg-install '(libpcre3-dev libssl-dev))
+
+    (receive (fname rdir)
+             (get-src durl file dir)
+             (with-cwd rdir
+                       (run (ls))
+                       (run (./configure ,prefix --with-http_ssl_module))
+                       (run (make install))
+                       ))))
 
 (define (lnmp d od)
   (get-opt 
     `(
       (--ins-php              -p     " install php               "  ,install-php)
       (--ins-imagick          -      " install php ext imagick   "  ,install-php-imagick)
+      (--ins-nginx            -n     " install nginx [prefix]    "  ,install-nginx)
       (--ins-cherokee         -c     " install cherokee          "  ,install-cherokee)
       (--ins-mariadb          -m     " install mariadb           "  ,install-mariadb)
       (--default              -      " default action            "  ,get-opt-usage)

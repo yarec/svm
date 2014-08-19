@@ -115,6 +115,7 @@
 
 ;; ftp://ftp.cwru.edu/pub/bash/readline-6.3.tar.gz
 ;; http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
+;; https://bitbucket.org/libgd/gd-libgd/downloads/libgd-2.1.0.tar.gz
 
 ;; RPM install
 ;; http://mirrors.163.com/.help/CentOS6-Base-163.repo
