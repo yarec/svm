@@ -1,9 +1,12 @@
 (define (new-yii1 d od)
-  (run (composer create-project --prefer-dist 
-                 --stability=stable
-                 "phundament/app:3.*" "testapp")
-       (= 2 1))
-  )
+  (let* ((value (oret:value d)) 
+         (appname (if (string=? value "") "yii-rest-app" value))
+         (tpl "yarec/yii-rest"))
+    (run (composer create-project --prefer-dist 
+                   --stability=dev
+                   ,tpl ,appname)
+         (= 2 1))))
+
 (define (new-yii2 d od)
   (let* ((value (oret:value d)) 
          (appname (if (string=? value "") "yiiapp" value))
@@ -23,9 +26,9 @@
 (define (composer d od)
   (get-opt 
     `(
-      (--new-yii      -Y|s|t " new yii1 app ex: phc -Y app rest "  , new-yii1)
-      (--new-yii2     -y|s|t " new yii2 app ex: phc -y app rest "  , new-yii2)
-      (--ins-pkg      -i|    " install deps                     "  , install-composer-pkg)
-      (--debug        -d||f  " debug                            "    #f)
-      (--default      -      " default action                   "  , get-opt-usage)
-      (--help         -h     " bprint this usage message        "  , get-opt-usage))))
+      (--new-yii      -Y|s|t " new yii1 app ex: phc -Y [app]      "   , new-yii1)
+      (--new-yii2     -y|s|t " new yii2 app ex: phc -y [app rest] "   , new-yii2)
+      (--ins-pkg      -i|    " install deps                       "   , install-composer-pkg)
+      (--debug        -d||f  " debug                              "     #f)
+      (--default      -      " default action                     "   , get-opt-usage)
+      (--help         -h     " bprint this usage message          "   , get-opt-usage))))
