@@ -25,11 +25,14 @@
 
 (define (install-phpbrew d od)
   (let ((tmp-phpbrew "/tmp/phpbrew"))
-    (run (curl -kL "https://raw.github.com/c9s/phpbrew/master/phpbrew") 
-         (> 1 ,tmp-phpbrew))
-    (run (chmod +x ,tmp-phpbrew))
-    (root-run `(mv ,tmp-phpbrew /usr/bin/phpbrew))
-    (run (phpbrew init))))
+    (if (file-exists? "/usr/bin/phpbrew")
+      (cout "/usr/bin/phpbrew exists")
+      (begin
+        (run (curl -kL "https://raw.github.com/c9s/phpbrew/master/phpbrew") 
+             (> 1 ,tmp-phpbrew))
+        (run (chmod +x ,tmp-phpbrew))
+        (root-run `(mv ,tmp-phpbrew /usr/bin/phpbrew))
+        (run (phpbrew init))))))
 
 (define (install-composer d od)
   (let ((tmp-file"/tmp/composer"))
@@ -113,8 +116,25 @@
                        (run (./configure --prefix=/usr --enable-utf8 --enable-unicode-properties))
                        (root-run '(make install))))))
 
-;; ftp://ftp.cwru.edu/pub/bash/readline-6.3.tar.gz
-;; http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
+(define (install-bzip2 d od)
+  (let ((durl "http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz")
+        (file "bzip2-1.0.6.tar.gz")
+        (dir "bzip2-1.0.6"))
+    (receive (fname rdir)
+             (get-src durl file dir)
+             (with-cwd rdir
+                       (root-run '(make install))))))
+
+(define (install-readline d od)
+  (let ((durl "ftp://ftp.cwru.edu/pub/bash/readline-6.3.tar.gz")
+        (file "readline-6.3.tar.gz")
+        (dir "readline-6.3"))
+    (receive (fname rdir)
+             (get-src durl file dir)
+             (with-cwd rdir
+                       (run (./configure))
+                       (root-run '(make install))))))
+
 ;; https://bitbucket.org/libgd/gd-libgd/downloads/libgd-2.1.0.tar.gz
 
 ;; RPM install
@@ -226,6 +246,8 @@ EOF
       (freetds     -      "                           "  ,install-freetds)
       (openssl     -      "                           "  ,install-openssl)
       (pcre        -      "                           "  ,install-pcre)
+      (bzip2       -      "                           "  ,install-bzip2)
+      (readline    -      "                           "  ,install-readline)
       (----------- -      "                           "  ,-)
       ;rpm
       (rpmforge    -      "                           "  ,install-rpmforge)

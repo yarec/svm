@@ -9,18 +9,28 @@
 
   (if (string=? os-type "redhat")
     (run (svm --install rpmforge)))
+
+  (let* ((pkgs (cond 
+                 ((string=? os-type "debian\n") '(php5 
+                                                   libxml2-dev libmcrypt-dev libxslt-dev
+                                                   libreadline-dev))
+                 ((string=? os-type "redhat\n") '(php php-xml
+                                                      bzip2-dev libxml2-dev libxslt-dev
+                                                      libmcrypt libmcrypt-dev readline-dev
+                                                      openssl-dev
+                                                      libreadline-dev
+                                                      libmemcached
+                                                      ))))
+         (value (oret:value d))
+         (ver   (if (string=? value "") "5.5.16" value))
+         )
+    (cout value)
+    (pkg-install pkgs)
+    (run (svm --install phpbrew))
+    (run (phpbrew install ,ver
+                  +default +fpm +mysql +pdo))
+    )
   
-  (pkg-install '(php php-xml
-                     bzip2-dev libxml2-dev libxslt-dev
-                     libmcrypt libmcrypt-dev readline-dev
-                     openssl-dev
-
-                     libreadline-dev
-
-                     libmemcached))
-  (run (svm --install phpbrew))
-  (run (phpbrew install 5.5.14 
-                +default +fpm +mysql +pdo))
 
   (out #<<EOF
 #--------------------------
@@ -96,7 +106,7 @@ EOF
 (define (lnmp d od)
   (get-opt 
     `(
-      (--ins-php              -p     " install php               "  ,install-php)
+      (--ins-php              -p|s|t " install php               "  ,install-php)
       (--ins-imagick          -      " install php ext imagick   "  ,install-php-imagick)
       (--ins-nginx            -n     " install nginx [prefix]    "  ,install-nginx)
       (--ins-cherokee         -c     " install cherokee          "  ,install-cherokee)
