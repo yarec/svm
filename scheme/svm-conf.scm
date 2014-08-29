@@ -21,6 +21,7 @@
       (te  (tailf ,(string-append (home-dir) "/.svm/log/error.log")))
       (le  (less  ,(string-append (home-dir) "/.svm/log/error.log")))
       (tne (tailf "/var/log/nginx/error.log"))
+      (ty  (tailf "protected/runtime/application.log"))
 
       (genp (run (| (cat /dev/urandom)
                     (tr -dc "_A-Z-a-z-0-9\\+\\~\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)")
