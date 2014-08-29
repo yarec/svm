@@ -17,6 +17,7 @@
             (echo 2)
             (echo 3))
 
+      ;; watch log
       (te  (tailf ,(string-append (home-dir) "/.svm/log/error.log")))
       (le  (less  ,(string-append (home-dir) "/.svm/log/error.log")))
       (tne (tailf "/var/log/nginx/error.log"))
@@ -26,11 +27,13 @@
                     (fold -w 12)
                     (head -n 10))))
 
+      ;;; system stauts
       (du  (run (| (ls -a1)
                    (awk "NR>2{print}")
                    (xargs -Iitem du -sh item)
                    (sort -h))))
 
+      ;;; os init
       (base (sudo apt-get -y install 
                   curl vim-gnome expect zsh ctags cscope
                   yakuake easystroke axel 
@@ -47,8 +50,18 @@
 
       (nvm  (run (| (curl -L https://raw.githubusercontent.com/creationix/nvm/v0.8.0/install.sh)
                     (sh))))
+      ;;; utils cmd
       (sethduuid (run (VBoxManage internalcommands sethduuid ,(get-arg-2nd))))
 
+      (amk (autoscan)
+           (aclocal)
+           (autoconf)
+           (automake --add-missing)
+           (./configure)
+           (make)
+           )
+
+      ;;; complex task
       (tsvm (run (cat funcs/common.sh funcs/git.sh funcs/scsh.sh funcs/install-main.sh)
                  (> /upg/svm/install.sh))
             (scp -r /upg/svm root@192.168.1.163:/upg/)
