@@ -149,6 +149,14 @@
     "epel" 
     "http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm"))
 
+(define (install-pyqt4 d od)
+  (run (sudo apt-get install 
+        libxext6 libxext-dev libqt4-dev libqt4-gui libqt4-sql 
+        qt4-dev-tools qt4-doc qt4-designer qt4-qtconfig "python-qt4-*" python-qt4
+        ;libqwt5-qt4 libqwt5-qt4-dev
+        ;qdevelop
+        )))
+
 (define (install-cm d od)
   (let ((repo-dir "/big/hadoop/")
         (html-dir "/usr/share/nginx/html/")
@@ -252,6 +260,9 @@ EOF
       ;rpm
       (rpmforge    -      "                           "  ,install-rpmforge)
       (epel        -      "                           "  ,install-epel)
+      (----------- -      "                           "  ,-)
+      ;sdk
+      (pyqt4       -      "                           "  ,install-pyqt4)
       (----------- -      "                           "  ,-)
       (svnserve    -      "                           "  ,install-svnserve)
       (----------- -      "                           "  ,-)
