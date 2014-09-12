@@ -3,7 +3,12 @@
   (for-each (lambda (x)
               (f-ln (string-append "/rt/" (symbol->string x)) 
                     "/"))
-            '(upg ws app dld vcs))
+            '(upg ws app))
+
+  (for-each (lambda (x)
+              (f-ln (string-append "/dat/" (symbol->string x)) 
+                    "/"))
+            '(dld vcs))
   ;; dotfiles
   (git-clone "https://github.com/yarec/dotfiles" "/upg/dotfiles")
   (for-each (lambda (x)
