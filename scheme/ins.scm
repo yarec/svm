@@ -34,6 +34,9 @@
         (root-run `(mv ,tmp-phpbrew /usr/bin/phpbrew))
         (run (phpbrew init))))))
 
+(define (install-ez d od)
+ (git-clone "https://github.com/centos-bz/EZHTTP" (string-append svm-src "/ezhttp")))
+
 (define (install-composer d od)
   (let ((tmp-file"/tmp/composer"))
     (run (curl -kL "https://getcomposer.org/installer") 
@@ -243,6 +246,7 @@ EOF
       (petite      -      "                           "  ,install-petite)
       (nvm         -      "                           "  ,install-nvm)
       (phpbrew     -      "                           "  ,install-phpbrew)
+      (ez          -      "                           "  ,install-ez)
       (composer    -      "                           "  ,install-composer)
       (----------- -      "                           "  ,-)
       (ack         -      "                           "  ,install-ack)

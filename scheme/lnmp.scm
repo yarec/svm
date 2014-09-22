@@ -55,6 +55,7 @@
 EOF
 )
   ;exts memcache memcached pdo_dblib
+  ;phpbrew ext install gd -- --with-jpeg-dir=/usr/lib/ (not work)
   )
 
 (define (install-php-imagick d od)
