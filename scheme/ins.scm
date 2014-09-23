@@ -160,6 +160,18 @@
         ;qdevelop
         )))
 
+(define (install-kernel-dev d od)
+  (let* ((pkgs (cond 
+                 ((string=? os-type "debian\n") 
+                  '(linux-headers-generic
+                     ))
+                 ((string=? os-type "redhat\n") 
+                  '(kernel-dev
+                     ))))
+         )
+    (pkg-install pkgs)
+    ))
+
 (define (install-cm d od)
   (let ((repo-dir "/big/hadoop/")
         (html-dir "/usr/share/nginx/html/")
@@ -267,6 +279,7 @@ EOF
       (----------- -      "                           "  ,-)
       ;sdk
       (pyqt4       -      "                           "  ,install-pyqt4)
+      (kernel-dev  -      "                           "  ,install-kernel-dev)
       (----------- -      "                           "  ,-)
       (svnserve    -      "                           "  ,install-svnserve)
       (----------- -      "                           "  ,-)
