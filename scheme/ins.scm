@@ -166,7 +166,7 @@
                   '(linux-headers-generic
                      ))
                  ((string=? os-type "redhat\n") 
-                  '(kernel-dev
+                  '(kernel-dev glibc-static
                      ))))
          )
     (pkg-install pkgs)
