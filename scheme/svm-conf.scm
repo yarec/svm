@@ -37,7 +37,8 @@
       ;;; os init
       (base (sudo apt-get -y install 
                   curl vim-gnome expect zsh ctags cscope
-                  yakuake easystroke axel 
+                  yakuake axel 
+                  ;easystroke 
                   mercurial git colordiff))
 
       (lnmp (sudo apt-get -y install 
@@ -46,7 +47,8 @@
       (apps (sudo apt-get -y install 
                   virtualbox-qt chromium-browser))
 
-      (mzsh (run (| (curl -L http://install.ohmyz.sh) 
+      (mzsh (run (| (sudo apt-get -y install zsh)
+                    (curl -L http://install.ohmyz.sh) 
                     (sudo sh))))
 
       (nvm  (run (| (curl -L https://raw.githubusercontent.com/creationix/nvm/v0.8.0/install.sh)
