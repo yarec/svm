@@ -138,6 +138,19 @@
                        (run (./configure))
                        (root-run '(make install))))))
 
+
+;I had the same problem, but it's fine now with these commands :
+;*sudo apt-get install libstdc++6:i386 libgcc1:i386 zlib1g:i386 libncurses5:i386
+;for running the emulator you need that additional package:
+;*sudo apt-get install libsdl1.2debian:i386
+;then install ia32-libs:
+;*apt-get install ia32-libs
+
+(define (install-ia32 d od)
+  (root-run '(sudo dpkg --add-architecture i386))
+  (root-run '(sudo apt-get install libc6-i386 lib32stdc++6 lib32gcc1 lib32ncurses5)) ;or sudo apt-get install lib32bz2-1.0
+  )
+
 ;; https://bitbucket.org/libgd/gd-libgd/downloads/libgd-2.1.0.tar.gz
 
 ;; RPM install
@@ -272,6 +285,7 @@ EOF
       (pcre        -      "                           "  ,install-pcre)
       (bzip2       -      "                           "  ,install-bzip2)
       (readline    -      "                           "  ,install-readline)
+      (ia32        -      "                           "  ,install-ia32)
       (----------- -      "                           "  ,-)
       ;rpm
       (rpmforge    -      "                           "  ,install-rpmforge)
