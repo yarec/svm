@@ -1,4 +1,6 @@
 (define (install-php d od)
+  ;; lnmp -p 5.4.33
+  ;;
   ;; install pdo_dblib manual:
   ;;
   ;; cd php-src/.../pdo_lib
@@ -82,6 +84,7 @@ EOF
                        (run (cmake "."))
                        (run (make))))))
 (define (install-nginx d od)
+ ;; lnmp -n  $prefix
   (let* ((durl "http://nginx.org/download/nginx-1.6.1.tar.gz")
          (file "nginx-1.6.1.tar.gz" )
          (dir "nginx-1.6.1")
