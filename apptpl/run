@@ -1,0 +1,3 @@
+#!/bin/sh
+scsh_libdir=$(cd "$(dirname "$0")"; pwd)/scheme
+. ~/.svm/src/svm/shell/start_app.sh
