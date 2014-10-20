@@ -19,6 +19,15 @@
 (define (update d od)
   (run (git -C ,(string-append (home-dir) "/.svm/src/svm/") pull)))
 
+;; svm -c appname
+(define (create-app d od)
+  (let* ((apptpl (string-append svm-src "/svm/apptpl"))
+         (arg2 (get-arg-2nd))
+         (name (if (string=? arg2 "") "app" arg2)))
+    (run (cp -r ,apptpl ,name))
+    )
+  )
+
 (define (main)
   (let ((conf-file (string-append (home-dir) "/.svm/conf/svm-conf.scm")))
     (if (file-exists? conf-file) (load conf-file)))
@@ -31,6 +40,11 @@
       ;      (--t4 -t4|s|t "  s|t #t "  ,get-opt-usage)
       ;      (--t5 -t5|s|f "  s|f #f "  ,get-opt-usage)
 
+      (--default   -     " default action            " , get-opt-usage)
+      (--update    -u    " self update               " , update)
+      (--create    -c    " create app                " , create-app)
+      (--debug     -d|b  " debug                     " , tmp)
+      (--tmp       -t    " tmp misc                  " , tmp)
       (--emacs     -     " [em]    emacs             " , emacs)
       (--vim       -     " [vv]    vim               " , vim)
       (--brunch    -     " [bh]    for brunch        " , brunch)
@@ -42,8 +56,4 @@
       (--init-os   -     " [os]    init os           " , os)
       (--lnmp      -     " [lnmp]  lnmp tool         " , lnmp)
       (--install   -     " [ins]   install util tool " , install)
-      (--default   -     " default action            " , get-opt-usage)
-      (--update    -u    " self update               " , update)
-      (--debug     -d|b  " debug                     " , tmp)
-      (--tmp       -t    " tmp misc                  " , tmp)
       (--help      -h    " print this usage message  " , get-opt-usage))))

@@ -50,9 +50,9 @@
 
 (define (get-opt-usage data oret-list)
   (cout (string-append 
-         "--------------\n"
+         "----------------------\n"
          " | options for " (if (string=? (get-argn 1) "") "svm" (get-argn 1)) ":\n"
-         "--------------"))
+         "----------------------"))
   (let ((ls '())
         (max-len 0))
     (for-each 
