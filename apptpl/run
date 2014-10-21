@@ -1,3 +1,4 @@
 #!/bin/sh
-scsh_libdir=$(cd "$(dirname "$0")"; pwd)/scheme
+export RUN_PATH=$(cd "$(dirname "$0")"; pwd)
+scsh_libdir=$RUN_PATH/scheme
 . ~/.svm/src/svm/shell/start_app.sh
