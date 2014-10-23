@@ -126,7 +126,8 @@
 
 ;; shell util
 (define (out str) (display (string-append str "\n")))
-(define (cout str) (run (,(string-append svm-path "/shell/color.sh") ,str 3 1 1)) (display "\n"))
+(define (color-output str x y) (run (,(string-append svm-path "/shell/color.sh") ,str ,x ,y 1)) (display "\n"))
+(define (cout str) (color-output str 3 1))
 (define (runcmd cmd)
   (if (equal? 'run (car cmd))
     (eval cmd (interaction-environment))
