@@ -8,6 +8,8 @@
   ;; ./configure --with-pdo-dblib=/usr/local/freetds
   ;; make install
   ;; extension="pdo_dblib.so" > php.ini
+  ;;
+  ;; for openssl error: -- --with-openssl
 
   (if (string=? os-type "redhat")
     (run (svm --install rpmforge)))

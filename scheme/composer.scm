@@ -21,6 +21,9 @@
          (= 2 1))))
 
 (define (install-composer-pkg d od)
+  (if (has-no-cmd "composer")
+    (run (ins "composer"))
+    )
   (run (composer install)))
 
 (define (composer d od)

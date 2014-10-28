@@ -12,6 +12,8 @@
                   planbox
                   ikarus.dev-derick-data
                   s48-stable))))
+    (git-push ((repos1 ("/ws/repo1" "/ws/repo2"))
+               (repos2 ("/ws/repo1" "/ws/repo2"))))
     (esh 
       (test (echo 1)
             (echo 2)

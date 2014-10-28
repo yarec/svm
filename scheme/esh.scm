@@ -33,10 +33,29 @@
     (run (mongodump -h ,host -d ,db -u ,user -p ,pwd -o ,dir1))
     (run (tar cvzf ,tar_name ,dir1))))
 
+;; esh -gp 99
+(define (git-push d od)
+ (cout "======== start git push ========")
+  (let* ((value (oret:value d))
+         (git-push-conf (get-conf 'git-push))
+         (repos (cadr (car git-push-conf)))
+         (push-repo (lambda (repo)
+                      (cout (string-append "push " repo))
+                      (run (git -C ,repo pull))
+                      (run (git -C ,repo push ,value master))
+                      ))
+         (push-repos (lambda (x)
+                       (let ((rname (get-conf-str1 x))
+                             (repo-ls (cadr x)))
+                         (if (string=? rname value)
+                           (for-each push-repo repo-ls))))))
+    (for-each push-repos repos)))
+
 (define (esh data oret-data)
   (get-opt 
     `(
-      (--list         -l     " list cmds                 "  ,esh-list-cmds)
-      (--backup-mdb   -      " backup mangolab db        "  ,bakup-mdb)
-      (--default      -      " default action            "  ,start-esh)
-      (--help         -h     " bprint this usage message "  ,get-opt-usage))))
+      (--list         -l      " list cmds                 "  ,esh-list-cmds)
+      (--backup-mdb   -       " backup mangolab db        "  ,bakup-mdb)
+      (--git-push     -gp|s|t " git push                  "  ,git-push)
+      (--default      -       " default action            "  ,start-esh)
+      (--help         -h      " bprint this usage message "  ,get-opt-usage))))
