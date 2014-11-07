@@ -77,7 +77,7 @@ class RestController extends Controller
         $type = isset($_GET['type'])?$_GET['type']:'all';
 
         $conds = '';
-        $params= [];
+        $params= array();
         if($type!='all'){
             $conds = 'type=:type';
             $params = array(':type'=>$type);
