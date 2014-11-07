@@ -2,8 +2,9 @@
   (let* ((value (oret:value d)) 
          (out-file (string-append value "Controller.php"))
          (tpl (string-append svm-path "/tpl/yii/RestController.php"))
+         (sed-cmd (string-append "s/Rest/" value "/g"))
          )
-    (run (sed -e "s/Rest/User/g" ,tpl)
+    (run (sed -e ,sed-cmd ,tpl)
          (> 1 ,out-file))
     ))
 
