@@ -3,6 +3,7 @@
 isroot(){
     if [ $(id -u) != "0" ]; then return 1; fi
 }
+if ! isroot; then sudo_str=sudo; fi
 
 has() {
   type "$1" > /dev/null 2>&1
@@ -98,7 +99,6 @@ os_name(){
 }
 
 pkg-install(){
-    if ! isroot; then sudo_str=sudo; fi
     case `os_name` in
         debian) $sudo_str apt-get -y install $1;;
         redhat) $sudo_str yum -y install $1;;
