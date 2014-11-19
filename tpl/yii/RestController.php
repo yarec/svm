@@ -86,6 +86,7 @@ class RestController extends Controller
         $items= self::db()
             ->from('rest')  
             ->where($conds, $params)  
+            ->order("id $this->order")
             ->limit($this->pagesize, $this->offset);
 
         $items = $items->queryAll();
