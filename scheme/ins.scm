@@ -67,8 +67,10 @@
           (lambda ()
             (let ((docker-install-url "https://get.docker.io/ubuntu/"))
               (if (has-no-cmd "docker")
-                (run (| (curl ,docker-install-url) 
-                        (sh)))))))
+               (begin
+                (root-run `(curl ,docker-install-url -o /tmp/ins-docker))
+                (root-run `(bash /tmp/ins-docker))
+                )))))
         (install-docker-centos 
           (lambda ()
             (run (svm --install epel))
