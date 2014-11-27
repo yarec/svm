@@ -23,6 +23,9 @@
         (run (| (curl ,nvm-install-url) 
                 (sh)))))))
 
+(define (install-brew d od)
+  (root-run `(ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)")))
+
 (define (install-phpbrew d od)
   (let ((tmp-phpbrew "/tmp/phpbrew"))
     (if (file-exists? "/usr/bin/phpbrew")
@@ -272,6 +275,7 @@ EOF
       (lein        -      "                           "  ,install-lein)
       (petite      -      "                           "  ,install-petite)
       (nvm         -      "                           "  ,install-nvm)
+      (brew        -      "                           "  ,install-brew)
       (phpbrew     -      "                           "  ,install-phpbrew)
       (ez          -      "                           "  ,install-ez)
       (composer    -      "                           "  ,install-composer)
