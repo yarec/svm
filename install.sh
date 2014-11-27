@@ -50,8 +50,9 @@ os_name(){
 
     if [ "{$OS}" == "windowsnt" ]; then
         OS=windows
-    elif [ "{$OS}" == "darwin" ]; then
+    elif [ "$OS" == "darwin" ]; then
         OS=mac
+        DistroBasedOn='mac'
     else
         OS=`uname`
         if [ "${OS}" = "SunOS" ] ; then
@@ -102,6 +103,7 @@ pkg-install(){
     case `os_name` in
         debian) $sudo_str apt-get -y install $1;;
         redhat) $sudo_str yum -y install $1;;
+        mac)    $sudo_str brew install $1;;
         *) echo os unknown;;
     esac
 }
@@ -115,6 +117,20 @@ check_tool(){
             pkg-install $TOOL
         #fi
     fi
+}
+
+check_brew(){
+    if ! has "brew"; then
+        echo "brew not found"
+        $sudo_str ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    fi
+}
+
+check_mac_tool(){
+    check_brew
+    check_tool pkg-config
+    check_tool automake
+    check_tool Libtool
 }
 git_clone(){
     REPO=$1
@@ -196,6 +212,7 @@ install_from_git() {
 for TOOL in git gcc autoconf; do
     check_tool $TOOL
 done
+check_mac_tool
 check_scsh
 
 BINPATH="\$HOME/.$APP_NAME/src/svm/bin"

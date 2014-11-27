@@ -9,8 +9,9 @@ MACH=`uname -m`
 
 if [ "{$OS}" == "windowsnt" ]; then
     OS=windows
-elif [ "{$OS}" == "darwin" ]; then
+elif [ "$OS" == "darwin" ]; then
     OS=mac
+    DistroBasedOn='mac'
 else
     OS=`uname`
     if [ "${OS}" = "SunOS" ] ; then

@@ -23,6 +23,7 @@ install_from_git() {
 for TOOL in git gcc autoconf; do
     check_tool $TOOL
 done
+check_mac_tool
 check_scsh
 
 BINPATH="\$HOME/.$APP_NAME/src/svm/bin"
