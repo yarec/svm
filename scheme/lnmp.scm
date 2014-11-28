@@ -17,6 +17,7 @@
   (let* ((pkgs (cond 
                  ((string=? os-type "debian\n") '(php5 
                                                    libxml2-dev libmcrypt-dev libxslt-dev
+                                                   libcurl4-openssl-dev libssl-dev
                                                    libreadline-dev))
                  ((string=? os-type "redhat\n") '(php php-xml
                                                       bzip2-dev libxml2-dev libxslt-dev
