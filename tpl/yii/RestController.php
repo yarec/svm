@@ -28,7 +28,8 @@ class RestController extends Controller
     public function filterInit($filterChain) {  
         $this->data['_uptm'] = date('Y-m-d H:i:s');
         self::info("initdata: " . json_encode($this->data));
-        $filterChain->run();  
+        $this->ck_auth($filterChain,'uid');
+        #$filterChain->run();  
     }  
 
     /**
