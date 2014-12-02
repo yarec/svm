@@ -103,7 +103,7 @@ pkg-install(){
     case `os_name` in
         debian) $sudo_str apt-get -y install $1;;
         redhat) $sudo_str yum -y install $1;;
-        mac)    $sudo_str brew install $1;;
+        mac)    brew install $1;;
         *) echo os unknown;;
     esac
 }
@@ -122,7 +122,7 @@ check_tool(){
 check_brew(){
     if ! has "brew"; then
         echo "brew not found"
-        $sudo_str ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     fi
 }
 
