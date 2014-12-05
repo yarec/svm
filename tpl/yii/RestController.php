@@ -75,13 +75,13 @@ class RestController extends Controller
      * ============================
      */
     public function getItems() {
-        $type = isset($_GET['type'])?$_GET['type']:'all';
 
+        $type = self::get('type','all');
         $conds = '';
         $params= array();
         if($type!='all'){
-            $conds = 'type=:type';
-            $params = array(':type'=>$type);
+            $conds .= 'type=:type';
+            $params[':type'] = $type;
         }
 
         $items= self::db()
