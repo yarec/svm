@@ -99,6 +99,10 @@ os_name(){
     echo "$DistroBasedOn"
 }
 
+ismac(){
+    if [ `os_name` != "mac" ]; then return 1; fi
+}
+
 pkg-install(){
     case `os_name` in
         debian) $sudo_str apt-get -y install $1;;
@@ -120,7 +124,7 @@ check_tool(){
 }
 
 check_brew(){
-    if ! has "brew"; then
+    if [ ismac && ! has "brew" ]; then
         echo "brew not found"
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     fi
