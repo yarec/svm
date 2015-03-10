@@ -124,7 +124,7 @@ check_tool(){
 }
 
 check_brew(){
-    if [ ismac && ! has "brew" ]; then
+    if ! has "brew"; then
         echo "brew not found"
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     fi

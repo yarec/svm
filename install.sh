@@ -124,7 +124,7 @@ check_tool(){
 }
 
 check_brew(){
-    if [ ismac && ! has "brew" ]; then
+    if ! has "brew"; then
         echo "brew not found"
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     fi
@@ -216,7 +216,9 @@ install_from_git() {
 for TOOL in git gcc autoconf; do
     check_tool $TOOL
 done
-check_mac_tool
+if ismac ; then
+    check_mac_tool
+fi
 check_scsh
 
 BINPATH="\$HOME/.$APP_NAME/src/svm/bin"
