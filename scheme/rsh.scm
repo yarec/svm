@@ -8,11 +8,16 @@
       (for-each (lambda (x)
                   (let* ((name (get-conf-str1 x))
                          (rest (cdr x))
-                         (rest-port (if (equal? (length rest) 3)
+                         (rest-len (length rest))
+                         (rest-port (if (equal? rest-len 3)
                                       (reverse (cons 22 (reverse rest)))
                                       rest)))
                     (if (string=? name arg-2nd)
-                      (run (,(string-append svm-path "/shell/expssh") ,@rest-port)))))
+                      (if (equal? rest-len 2)
+                        (let ((host (symbol->string (car rest)))
+                              (user (symbol->string (cadr rest))))
+                          (run (ssh ,(string-append user "@" host))))
+                        (run (,(string-append svm-path "/shell/expssh") ,@rest-port))))))
                 (cadr (car rsh-conf))))))
 
 
