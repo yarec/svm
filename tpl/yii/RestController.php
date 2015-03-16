@@ -139,8 +139,13 @@ class RestController extends Controller
         }
     }
 
-    public function loadItem($id) {
-        return Rest::model()->findByPk($id);
+    public function loadItem($id, $val=null) {
+        if($val){
+            return Rest::model()->findAllByAttributes(array($id=>$val));
+        }
+        else{
+            return Rest::model()->findByPk($id);
+        }
     }
     
     /**
