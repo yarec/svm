@@ -70,6 +70,15 @@
                       (grep "inet addr:")
                       (awk "{print $2}"))))
 
+      ;; php -S localhost:8000
+      (http (python -m SimpleHTTPServer))
+
+      (fitnis (sh /upg/fitnis/run.sh))
+
+      (clz (run (| (find "." -name "*.zip")
+                   (xargs rm)
+                   )))
+
       ;;; complex task
       (tsvm (run (cat funcs/common.sh funcs/git.sh funcs/scsh.sh funcs/install-main.sh)
                  (> /upg/svm/install.sh))

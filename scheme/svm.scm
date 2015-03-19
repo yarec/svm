@@ -50,6 +50,7 @@
       (--brunch    -     " [bh]    for brunch        " , brunch)
       (--luminus   -     " [lum]   for luminus       " , luminus)
       (--composer  -     " [phc]   for composer      " , composer)
+      (--sencha    -     " [sen]   for sencha        " , sencha)
       (--rsh       -     " [rsh]   ssh login         " , rsh)
       (--esh       -     " [esh]   exec shell        " , esh)
       (--upg       -     " [upg]   upg manage        " , upg)

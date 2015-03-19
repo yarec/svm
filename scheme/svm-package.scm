@@ -5,7 +5,7 @@
         define-record-types)
   (files opt utils 
          emacs vim 
-         brunch luminus composer
+         brunch luminus composer sencha
          rsh esh upg 
          os lnmp ins 
          svm))
