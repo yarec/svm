@@ -157,3 +157,15 @@
                       (if (equal? name '--default)
                         (apply handler '(#f #f)))))
                   opts)))))
+
+(define (get-opt-item in-name oret-list)
+  (let ((ret ""))
+    (for-each 
+      (lambda (dat)
+        (let ((name (oret:name dat))
+              (value (oret:value dat)))
+          (if (string=? name in-name)
+            (set! ret value)
+            )))
+      oret-list)
+    ret))
