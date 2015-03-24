@@ -20,10 +20,10 @@
             (echo 3))
 
       ;; watch log
-      (te  (tailf ,(string-append (home-dir) "/.svm/log/error.log")))
+      (te  (tail -f ,(string-append (home-dir) "/.svm/log/error.log")))
       (le  (less  ,(string-append (home-dir) "/.svm/log/error.log")))
-      (tne (tailf "/var/log/nginx/error.log"))
-      (ty  (tailf "protected/runtime/application.log"))
+      (tne (tail -f "/var/log/nginx/error.log"))
+      (ty  (tail -f "protected/runtime/application.log"))
 
       (genp (run (| (cat /dev/urandom)
                     (tr -dc "_A-Z-a-z-0-9\\+\\~\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)")
@@ -70,8 +70,9 @@
                       (grep "inet addr:")
                       (awk "{print $2}"))))
 
-      ;; php -S localhost:8000
-      (http (python -m SimpleHTTPServer))
+      (httpy (python -m SimpleHTTPServer))
+
+      (httphp (php -S localhost:8000))
 
       (fitnis (sh /upg/fitnis/run.sh))
 
