@@ -72,7 +72,7 @@
 
       (httpy (python -m SimpleHTTPServer))
 
-      (httphp (php -S localhost:8000))
+      (httphp (php -S ,(string-append "localhost:" (if (string=? (get-argn 3) "") "8000" (get-argn 3)))))
 
       (fitnis (sh /upg/fitnis/run.sh))
 
