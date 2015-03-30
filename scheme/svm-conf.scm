@@ -70,15 +70,25 @@
                       (grep "inet addr:")
                       (awk "{print $2}"))))
 
+      (clz (run (| (find "." -name "*.zip")
+                   (xargs rm)
+                   )))
+
+      ;;; start service
       (httpy (python -m SimpleHTTPServer))
 
       (httphp (php -S ,(string-append "localhost:" (if (string=? (get-argn 3) "") "8000" (get-argn 3)))))
 
       (fitnis (sh /upg/fitnis/run.sh))
 
-      (clz (run (| (find "." -name "*.zip")
-                   (xargs rm)
-                   )))
+      (mongod (mongod --config /usr/local/etc/mongod.conf))
+
+      (gae (python /Users/rt/app/XX-Net-1.0.9/launcher/start.py))
+
+      (nmp (/usr/local/sbin/php-fpm -D)
+           (mysql.server start)
+           (sudo nginx)
+           (memcached -d)
 
       ;;; complex task
       (tsvm (run (cat funcs/common.sh funcs/git.sh funcs/scsh.sh funcs/install-main.sh)
