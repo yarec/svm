@@ -109,8 +109,6 @@ class RestController extends Controller
     }
 
     public function saveItem($id=null, $return=0) {
-        $errs = Yii::app()->params['errors'];
-
         $item= $this->loadItem($id);
         if(!$item){
             $this->data['_intm'] = date('Y-m-d H:i:s');
@@ -130,12 +128,12 @@ class RestController extends Controller
             }else{ 
                 $err = $item->getErrors();
                 $this->error(json_encode($err));
-                self::ret($err, $errs['PARAM_ERR']);
+                self::ret($err, 'PARAM_ERR');
             } 
         }catch(Exception $e) {
             $msg = $e->getMessage();
             self::info("Rest save 失败: ".$msg);
-            self::ret($errs['SQL_ERR']);
+            self::ret('SQL_ERR', 'sql error');
         }
     }
 
