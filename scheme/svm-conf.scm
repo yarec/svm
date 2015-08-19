@@ -88,7 +88,7 @@
       (nmp (/usr/local/sbin/php-fpm -D)
            (mysql.server start)
            (sudo nginx)
-           (memcached -d)
+           (memcached -d))
 
       ;;; complex task
       (tsvm (run (cat funcs/common.sh funcs/git.sh funcs/scsh.sh funcs/install-main.sh)
