@@ -1,11 +1,11 @@
 (define (get-esh-cmds)
   (cdr (car (get-conf 'esh))))
 
-(define (start-esh data oret-data)
+(define (start-esh d od)
   (let* ((len (length command-line-arguments)) 
          (arg-2nd (get-arg-2nd)))
     (if (string=? "" arg-2nd)
-      (display "arg ned")
+      (esh-list-cmds d od)
       (for-each (lambda (x)
                   (let* ((name (get-conf-str1 x))
                          (cmds (cdr x)))

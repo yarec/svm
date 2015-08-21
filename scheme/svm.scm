@@ -54,6 +54,7 @@
       (--rsh       -     " [rsh]   ssh login         " , rsh)
       (--esh       -     " [esh]   exec shell        " , esh)
       (--upg       -     " [upg]   upg manage        " , upg)
+      (--svn       -     " [svn]   svn utils         " , svn)
       (--init-os   -     " [os]    init os           " , os)
       (--lnmp      -     " [lnmp]  lnmp tool         " , lnmp)
       (--install   -     " [ins]   install util tool " , install)

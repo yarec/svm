@@ -7,5 +7,6 @@
          emacs vim 
          brunch luminus composer sencha
          rsh esh upg 
+         svn
          os lnmp ins 
          svm))
