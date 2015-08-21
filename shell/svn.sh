@@ -1,7 +1,7 @@
 #!/bin/sh
 
 grepstr(){
-    exts=(.php .html)
+    exts=(.php .phtml .ini)
 
     grepstr=
     for ext in ${exts[@]}
