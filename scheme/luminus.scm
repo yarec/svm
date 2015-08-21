@@ -16,6 +16,9 @@
 
 (define (run-lein-ring d od)
   (run (lein ring server-headless)))
+
+(define (run-figwheel d od)
+  (run (lein figwheel)))
     
 (define (run-lein-jar d od)
   (run (lein ring uberjar)))
@@ -33,6 +36,7 @@
       (--new-lum-full -N|s|t " new luminus with full     "  ,new-with-full)
       (--new-with-m   -m|s|t " new luminus with mysql    "  ,new-with-mysql)
       (--run          -r     " run and watch             "  ,run-lein-ring)
+      (--fig          -f     " run figwheel              "  ,run-figwheel)
       (--jar          -j     " build exec jar            "  ,run-lein-jar)
       (--war          -w     " build war                 "  ,run-lein-war)
       (--cljar        -c     " deploy cljar              "  ,run-lein-cljar)
