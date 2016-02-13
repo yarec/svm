@@ -98,6 +98,20 @@
             ;(run (ssh root@192.168.1.167 "/upg/svm/bin/lnmp") )
             )
 
+      (svnls (run (| (sh ,(string-append svm-path "/bin/ssvn") -p
+                         ,(if (string=? (get-argn 3) "") "PREV" (get-argn 3))
+                         ren)
+                     (sed "s@/regonline@@")
+                     ;(xargs svn up)
+                     )))
+
+      (svnup (run (| (sh ,(string-append svm-path "/bin/ssvn") -p
+                         ,(if (string=? (get-argn 3) "") "PREV" (get-argn 3))
+                         ren)
+                     (sed "s@/regonline@@")
+                     (xargs svn up)
+                     )))
+
       (cm (run (| (cat /upg/svm/shell/cm_cfg_centos.sh)
                   ;(head -n 17)
                   ;(cat)
