@@ -1,5 +1,30 @@
+(define (machine-ls d od)
+  (run (docker-machine ls)))
+
+(define (machine-start d od)
+  (let* ((value (or-str (oret:value d) "default"))
+         )
+    (run (docker-machine start ,value))
+     ))
+
+(define (machine-stop d od)
+  (let* ((value (or-str (oret:value d) "default"))
+         )
+    (run (docker-machine stop ,value))
+     ))
+
+(define (machine-env d od)
+  (let* ((value (or-str (oret:value d) "default"))
+         )
+    (run (docker-machine env ,value))
+     (cout "# eval \"$(dk env)")
+     ))
+
 (define (compose-up d od)
   (run (docker-compose up)))
+
+(define (compose-build d od)
+  (run (docker-compose build)))
 
 (define (docker-ps d od)
   (let* ((value (oret:value d))
@@ -20,6 +45,9 @@
     (display line)
     cid))
 
+(define (docker-build d od)
+  (run (docker build)))
+
 (define (docker-stop d od)
   (let* ((value (oret:value d))
          (image (or-str value "yarec/ornginx"))
@@ -31,9 +59,16 @@
 (define (docker data oret-data)
   (get-opt 
     `(
+      (--ls           ls     " machine ls                "  ,machine-ls)
+      (--mstart   mstart|s|t " machine start             "  ,machine-start)
+      (--mstop     mstop|s|t " machine stop              "  ,machine-stop)
+      (----------- -      "                           "  ,-)
       (--ps           ps|s|t " show containers           "  ,docker-ps)
-      (--up           -u     " compose up                "  ,compose-up)
       (--stop       stop|s|t " stop container            "  ,docker-stop)
+      (--build         b|s|t " build image               "  ,docker-build)
+      (----------- -      "                           "  ,-)
+      (--up           up     " compose up                "  ,compose-up)
+      (--cbuild       cb     " build service             "  ,compose-build)
       (--debug        -d||f  " debug                     "  #f)
       (--default      -      " default action            "  ,get-opt-usage)
       (--help         -h     " bprint this usage message "  ,get-opt-usage))))
