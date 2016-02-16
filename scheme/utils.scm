@@ -79,6 +79,9 @@
              (else (split a (+ 1 b)))))))
       (split 0 0))))
 
+(define (or-str str default)
+  (if (string=? str "") default str))
+
 ;; list utils
 (define (zip1 item items)
   (let ((lst '()))

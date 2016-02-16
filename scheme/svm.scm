@@ -45,6 +45,7 @@
       (--create    -c    " create app                " , create-app)
       (--debug     -d|b  " debug                     " , tmp)
       (--tmp       -t    " tmp misc                  " , tmp)
+      (--docker    -     " [dk]    docker            " , docker)
       (--emacs     -     " [em]    emacs             " , emacs)
       (--vim       -     " [vv]    vim               " , vim)
       (--brunch    -     " [bh]    for brunch        " , brunch)
