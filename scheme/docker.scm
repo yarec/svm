@@ -6,7 +6,7 @@
 
 (define (machine-create d od)
   (let* ((value (default-machine-name d)))
-    (run (docker-machine create -driver virtualbox ,value))))
+    (run (docker-machine create --driver virtualbox ,value))))
 
 (define (machine-start d od)
   (let* ((value (default-machine-name d)))
@@ -16,6 +16,10 @@
   (let* ((value (default-machine-name d)))
     (run (docker-machine stop ,value))))
 
+(define (machine-restart d od)
+  (let* ((value (default-machine-name d)))
+    (run (docker-machine restart ,value))))
+
 (define (machine-ip d od)
   (let* ((value (default-machine-name d)))
     (run (docker-machine ip ,value))))
@@ -24,6 +28,10 @@
   (let* ((value (default-machine-name d)))
     (run (docker-machine env ,value))
     (cout "# eval \"$(dk env)")))
+
+(define (machine-ssh d od)
+  (let* ((value (default-machine-name d)))
+    (run (docker-machine ssh ,value))))
 
 (define (compose-up d od)
   (run (docker-compose up)))
@@ -52,6 +60,21 @@
 (define (docker-build d od)
   (run (docker build)))
 
+(define (docker-clean d od)
+  (run (| (docker ps -a)
+          (grep "Exited")
+          (awk "{print $1}")
+          (xargs docker stop)))
+  (run (| (docker ps -a)
+          (grep "Exited")
+          (awk "{print $1}")
+          (xargs docker rm)))
+  (run (| (docker images)
+          (grep none)
+          (awk "{print $3}")
+          (xargs docker rmi))))
+
+
 (define (docker-stop d od)
   (let* ((value (oret:value d))
          (image (or-str value "yarec/ornginx"))
@@ -66,13 +89,16 @@
       (--create   create|s|t " machine create            "  ,machine-create)
       (--mstart   mstart|s|t " machine start             "  ,machine-start)
       (--mstop     mstop|s|t " machine stop              "  ,machine-stop)
+      (--mrestart  mrest|s|t " machine restart           "  ,machine-restart)
       (--ip           ip|s|t " machine ip                "  ,machine-ip)
       (--env         env|s|t " machine env               "  ,machine-env)
+      (--ssh         ssh|s|t " machine ssh               "  ,machine-ssh)
       (----------- -      "                           "  ,-)
       (--images     imgs|s|t " show images               "  ,docker-images)
       (--ps           ps|s|t " show containers           "  ,docker-ps)
       (--stop       stop|s|t " stop container            "  ,docker-stop)
       (--build         b|s|t " build image               "  ,docker-build)
+      (--clean     clean|s|t " clean none c imgs         "  ,docker-clean)
       (----------- -      "                           "  ,-)
       (--up           up     " compose up                "  ,compose-up)
       (--cbuild       cb     " build service             "  ,compose-build)
