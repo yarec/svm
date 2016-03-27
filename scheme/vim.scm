@@ -16,7 +16,7 @@
     (ins-vimrc      vimrc-dir)))
 
 (define (install-vim svm-dir)
-  (let* ((vim-download-url "http://mirrors.go-parts.com/pub/vim/unix/vim-7.4.tar.bz2")
+  (let* ((vim-download-url "https://github.com/vim/vim/archive/v7.4.1655.tar.gz")
          (archives-dir (string-append svm-dir "/archives/"))
          (vim-dir (string-append archives-dir "vim74"))
          (vim-fname "vim-7.4.tar.bz2")
