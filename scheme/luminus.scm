@@ -15,7 +15,7 @@
     (run (lein new luminus ,appname +mongodb +auth +cljs +http-kit))))
 
 (define (run-lein-ring d od)
-  (run (lein ring server-headless)))
+  (run (lein run)))
 
 (define (run-figwheel d od)
   (run (lein figwheel)))

@@ -77,6 +77,12 @@
           (awk "{print $3}")
           (xargs docker rmi))))
 
+(define (docker-mount d od)
+  (run (vboxmanage sharedfolder add dev --name "upg" --hostpath "/upg" --transient))
+  (run (docker-machine ssh dev "sudo mkdir -p /upg"))
+  (run (docker-machine ssh dev "sudo mount -t vboxsf  upg /upg"))
+  )
+
 
 (define (docker-stop d od)
   (let* ((value (oret:value d))
@@ -115,6 +121,7 @@
       (--ip           ip|s|t " machine ip                "  ,machine-ip)
       (--env         env|s|t " machine env               "  ,machine-env)
       (--ssh         ssh|s|t " machine ssh               "  ,machine-ssh)
+      (--mount       mnt|s|t " mount share dir           "  ,docker-mount)
       (----------- -      "                           "  ,-)
       (--images     imgs|s|t " show images               "  ,docker-images)
       (--ps           ps|s|t " show containers           "  ,docker-ps)
