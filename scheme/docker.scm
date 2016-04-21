@@ -1,6 +1,9 @@
 (define (default-machine-name d)
   (or-str (oret:value d) "dev"))
 
+(define (default-phc-cmd d)
+  (or-str (oret:value d) "install"))
+
 (define (machine-ls d od)
   (run (docker-machine ls)))
 
@@ -76,6 +79,10 @@
           (grep none)
           (awk "{print $3}")
           (xargs docker rmi))))
+(define (run-composer d od)
+  (let ( (cmd (default-phc-cmd d)))
+    (run (docker run --rm -it -v ,(string-append (cwd) ":/data") yarec/composer composer ,cmd))
+    ))
 
 (define (docker-mount d od)
   (run (vboxmanage sharedfolder add dev --name "upg" --hostpath "/upg" --transient))
@@ -128,6 +135,8 @@
       (--stop       stop|s|t " stop container            "  ,docker-stop)
       (--build         b|s|t " build image               "  ,docker-build)
       (--clean     clean|s|t " clean none c imgs         "  ,docker-clean)
+      (----------- -      "                           "  ,-)
+      (--composer    phc|s|t " run composer              "  ,run-composer)
       (----------- -      "                           "  ,-)
       (--up           up     " compose up                "  ,compose-up)
       (--cbuild       cb     " build service             "  ,compose-build)
