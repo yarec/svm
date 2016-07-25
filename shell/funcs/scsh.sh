@@ -1,7 +1,7 @@
 
 ins_scsh(){
     SCSH_TMP_DIR=$HOME/.svm/src/scsh
-    SCSH_SOURCE="https://gitcafe.com/yarec/scsh"
+    SCSH_SOURCE="https://git.coding.net/softidy/scsh.git"
     if [ ! -d "$SCSH_TMP_DIR/.git" ]; then
         git_clone "scsh" $SCSH_TMP_DIR $SCSH_SOURCE
     fi
@@ -19,7 +19,7 @@ ins_s48(){
 
     S48_TMP_DIR="$HOME/.svm/archives/scheme48-1.9.2"
     #S48_TMP_DIR="s48"
-    S48_SOURCE="https://gitcafe.com/yarec/s48/raw/master/scheme48-1.9.2.tgz"
+    S48_SOURCE="https://coding.net/u/softidy/p/s48/git/blob/master/scheme48-1.9.2.tgz"
     S48_TAR=$HOME/.svm/archives/s48-1.9.2.tar.gz
     S48_ARCHIVES_DIR=$HOME/.svm/archives
     if [ ! -f "$S48_TAR" ]; then
