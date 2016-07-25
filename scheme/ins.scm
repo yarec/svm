@@ -17,7 +17,7 @@
                          (root-run '(make install)))))))
 
 (define (install-nvm d od)
-  (let* ((nvm-install-url "https://raw.githubusercontent.com/creationix/nvm/v0.7.0/install.sh"))
+  (let* ((nvm-install-url "https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh"))
     (if (has-no-cmd "nvm")
       (begin
         (run (| (curl ,nvm-install-url) 
