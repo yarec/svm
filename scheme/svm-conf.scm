@@ -90,6 +90,8 @@
            (sudo nginx)
            (memcached -d))
 
+      (pwget (run (wget --no-check-certificate -e "https_proxy=http://127.0.0.1:8087" ,(get-argn 3))))
+
       ;;; complex task
       (tsvm (run (cat funcs/common.sh funcs/git.sh funcs/scsh.sh funcs/install-main.sh)
                  (> /upg/svm/install.sh))
