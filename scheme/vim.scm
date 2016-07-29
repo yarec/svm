@@ -3,14 +3,19 @@
   (git-clone "git://github.com/amix/vimrc.git" dir))
 
 (define (ins-vundle dir)
-  (git-clone "https://github.com/gmarik/vundle" dir))
+  (git-clone "https://github.com/VundleVim/Vundle.vim.git" dir))
 
 (define (ins-vimrc dir)
   (git-clone "https://github.com/yarec/vimrc" dir))
 
 (define (init-vimrc vimrc-dir)
   (let ((amix-vimrc-dir (string-append (home-dir) "/.vim/amix-vimrc"))
-        (vundle-dir     (string-append (home-dir) "/.vim/bundle/vundle")))
+        (vundle-dir     (string-append (home-dir) "/.vim/bundle/Vundle.vim")))
+
+    ;;(out (string-append "ins-vundle: " "git clone git://github.com/amix/vimrc.git " vundle-dir))
+    ;;(out (string-append "ins-amix-vimrc: " "git clone https://github.com/gmarik/vundle " amix-vimrc-dir))
+    ;;(out (string-append "ins-vimrc: " "git clone https://github.com/yarec/vimrc " vimrc-dir))
+
     (ins-vundle     vundle-dir)
     (ins-amix-vimrc amix-vimrc-dir)
     (ins-vimrc      vimrc-dir)))
@@ -61,8 +66,21 @@
     (setenv "BASE_PATH" base-path)
     (setenv "VIMRT"     vim-files)
     (setenv "VUNDLE"    "true")
+
+    (out (string-append "export BASE_PATH=" base-path))
+    (out (string-append "export VIMRT=" vim-files))
+    (out (string-append "export VUNDLE=true"))
+
+    ;;(out vimrc-dir)
+    ;;(out vim-tmp-dir)
+    ;;(out vimrc)
+
     (install-vim svm-dir)
     (init-vimrc vimrc-dir)
+
+    ;;(out (string-append "mkdir -p " vim-tmp-dir))
+    ;;(out (string-append "run vim: vim -u " vimrc))
+
     (run (mkdir -p ,vim-tmp-dir))
     (run (vim -u ,vimrc ,@files))))
 
