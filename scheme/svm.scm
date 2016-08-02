@@ -7,7 +7,7 @@
 
   ;(pkg-install "ncurses-dev")
   ;(display (has-cmd "node"))
-  ;;(display (get-argsn 3))
+  (display (get-argsn 3))
 
 ;  (define cmd '(run (| (ls -a1 ".")
 ;                       (awk "NR>2{print}")
