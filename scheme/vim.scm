@@ -23,8 +23,6 @@
 (define (install-vim svm-dir)
   (let* ((vim-download-url "https://github.com/vim/vim/archive/v7.4.1655.tar.gz")
          (archives-dir (string-append svm-dir "/archives/"))
-         (vim-74-dir (find-dir archives-dir "vim*"))
-         (vim-dir (string-append archives-dir vim-74-dir))
          (vim-fname "vim-7.4.tar.bz2")
          (real-fname (string-append archives-dir vim-fname)))
     (if (and (file-not-exists? "/usr/bin/vim")
@@ -34,9 +32,12 @@
           (download vim-download-url real-fname))
         (pkg-install "ncurses-dev")
         (run (tar -C ,archives-dir -xvf ,real-fname))
-        (with-cwd vim-dir
-                  (run (./configure))
-                  (run (make install)))))))
+        (let* ((vim-74-dir (find-dir archives-dir "vim*"))
+               (vim-dir (string-append archives-dir vim-74-dir)))
+          (with-cwd vim-dir
+                    (run (./configure))
+                    (run (make install)))
+          )))))
 
 (define (install-vim-handler data oret-data)
  (display 1)
