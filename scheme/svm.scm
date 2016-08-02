@@ -7,14 +7,15 @@
 
   ;(pkg-install "ncurses-dev")
   ;(display (has-cmd "node"))
-  (display (get-argsn 3))
+  ;;(display (get-argsn 3))
 
 ;  (define cmd '(run (| (ls -a1 ".")
 ;                       (awk "NR>2{print}")
 ;                       (xargs -Iitem du -sh item)
 ;                       (sort -h))))
 ;  (runcmd cmd)
-  )
+;;(out (find-dir "vim*"))
+)
 
 (define (update d od)
   (run (git -C ,(string-append (home-dir) "/.svm/src/svm/") pull)))

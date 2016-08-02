@@ -135,3 +135,14 @@
   (if (equal? 'run (car cmd))
     (eval cmd (interaction-environment))
     (run (,@cmd))))
+
+
+(define (find-dir path name)
+  (let* ((file-path (run/string (| (find ,path -name ,name )
+                                   (grep "vim")
+                                   )) )
+         (files (str-split file-path #\newline))
+         (ls (filter (lambda (f)
+                       (file-directory? f))
+                     files)))
+    (car ls)))
