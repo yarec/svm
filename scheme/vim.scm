@@ -32,9 +32,8 @@
           (download vim-download-url real-fname))
         (pkg-install "ncurses-dev")
         (run (tar -C ,archives-dir -xvf ,real-fname))
-        (let* ((vim-74-dir (find-dir archives-dir "vim*"))
-               (vim-dir (string-append archives-dir vim-74-dir)))
-          (with-cwd vim-dir
+        (let* ((vim-74-dir (find-dir archives-dir "vim*")))
+          (with-cwd vim-74-dir
                     (run (./configure))
                     (run (make install)))
           )))))
