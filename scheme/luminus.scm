@@ -21,10 +21,10 @@
   (run (lein figwheel)))
     
 (define (run-lein-jar d od)
-  (run (lein ring uberjar)))
+  (run (lein uberjar)))
 
 (define (run-lein-war d od)
-  (run (lein ring uberwar)))
+  (run (lein uberwar)))
 
 (define (run-lein-cljar d od)
   (run (lein deploy clojars)))
