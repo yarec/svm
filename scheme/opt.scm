@@ -21,7 +21,7 @@
         ((equal? n 6) (cadddr (cddr command-line-arguments)))
         ((equal? n 7) (cadddr (cdddr command-line-arguments))))
       "")))
-
+;; (get-argsn 2) (arg2 arg3 ...)
 (define (get-argsn n)
   (let ((len (length command-line-arguments)))
     (if (>= len n)

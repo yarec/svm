@@ -1,3 +1,5 @@
+
+;; docker-machine
 (define (default-machine-name d)
   (or-str (oret:value d) "dev"))
 
@@ -39,17 +41,31 @@
   (let* ((value (default-machine-name d)))
     (run (docker-machine ssh ,value))))
 
+;; docker-compose
 (define (compose-up d od)
   (run (docker-compose up)))
 
 (define (compose-build d od)
   (run (docker-compose build)))
 
+;; docker
 (define (docker-ps d od)
   (let* ((value (oret:value d)))
     (if (string=? value "") 
       (run (docker ps))
       (run (docker ps ,value)))))
+
+(define (docker-exec d od)
+  (let* ((value (oret:value d))
+         (args (get-argsn 2))
+         )
+    (run (docker exec -it ,@args ))
+    ))
+
+(define (docker-sh d od)
+  (let* ((value (oret:value d)))
+    (run (docker exec -it ,value /bin/sh))
+    ))
 
 (define (docker-cid image)
   (let* ((line (run/string 
@@ -132,6 +148,8 @@
       (----------- -      "                           "  ,-)
       (--images     imgs|s|t " show images               "  ,docker-images)
       (--ps           ps|s|t " show containers           "  ,docker-ps)
+      (--exec         ex|s|t " exec                      "  ,docker-exec)
+      (--sh           sh|s|t " exec /bin/sh              "  ,docker-sh)
       (--stop       stop|s|t " stop container            "  ,docker-stop)
       (--build         b|s|t " build image               "  ,docker-build)
       (--clean     clean|s|t " clean none c imgs         "  ,docker-clean)
