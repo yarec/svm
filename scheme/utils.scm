@@ -132,9 +132,13 @@
 (define (color-output str x y) (run (,(string-append svm-path "/shell/color.sh") ,str ,x ,y 1)) (display "\n"))
 (define (cout str) (color-output str 3 1))
 (define (runcmd cmd)
-  (if (equal? 'run (car cmd))
+  (if (or (equal? 'run (car cmd))
+          (equal? '& (car cmd))
+          (equal? 'with-cwd (car cmd))
+          )
+   ;;(display cmd)
     (eval cmd (interaction-environment))
-    (run (,@cmd))))
+    (& (,@cmd))))
 
 
 (define (find-dir path name)

@@ -83,7 +83,7 @@
     ;;(out (string-append "run vim: vim -u " vimrc))
 
     (run (mkdir -p ,vim-tmp-dir))
-    (run (vim -u ,vimrc ,@files))))
+    (& (vim -u ,vimrc ,@files))))
 
 (define (vim data oret-data)
   (get-opt 

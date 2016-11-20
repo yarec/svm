@@ -16,8 +16,8 @@
                       (if (equal? rest-len 2)
                         (let ((host (symbol->string (car rest)))
                               (user (symbol->string (cadr rest))))
-                          (run (ssh ,(string-append user "@" host))))
-                        (run (,(string-append svm-path "/shell/expssh") ,@rest-port))))))
+                          (& (ssh ,(string-append user "@" host))))
+                        (& (,(string-append svm-path "/shell/expssh") ,@rest-port))))))
                 (cadr (car rsh-conf))))))
 
 
