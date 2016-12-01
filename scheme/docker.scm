@@ -7,27 +7,27 @@
   (or-str (oret:value d) "install"))
 
 (define (machine-ls d od)
-  (run (docker-machine ls)))
+  (& (docker-machine ls)))
 
 (define (machine-create d od)
   (let* ((value (default-machine-name d)))
-    (run (docker-machine create --driver virtualbox ,value))))
+    (& (docker-machine create --driver virtualbox ,value))))
 
 (define (machine-start d od)
   (let* ((value (default-machine-name d)))
-    (run (docker-machine start ,value))))
+    (& (docker-machine start ,value))))
 
 (define (machine-stop d od)
   (let* ((value (default-machine-name d)))
-    (run (docker-machine stop ,value))))
+    (& (docker-machine stop ,value))))
 
 (define (machine-restart d od)
   (let* ((value (default-machine-name d)))
-    (run (docker-machine restart ,value))))
+    (& (docker-machine restart ,value))));
 
 (define (machine-ip d od)
   (let* ((value (default-machine-name d)))
-    (run (docker-machine ip ,value))))
+    (& (docker-machine ip ,value))))
 
 (define (machine-env d od)
   (let* ((value (default-machine-name d))
@@ -39,46 +39,46 @@
 
 (define (machine-ssh d od)
   (let* ((value (default-machine-name d)))
-    (run (docker-machine ssh ,value))))
+    (& (docker-machine ssh ,value))))
 
 ;; docker-compose
 (define (compose-up d od)
-  (run (docker-compose up)))
+  (& (docker-compose up)))
 
 (define (compose-build d od)
-  (run (docker-compose build)))
+  (& (docker-compose build)))
 
 ;; docker
 (define (docker-ps d od)
   (let* ((value (oret:value d)))
     (if (string=? value "") 
-      (run (docker ps))
-      (run (docker ps ,value)))))
+      (& (docker ps))
+      (& (docker ps ,value)))))
 
 (define (docker-rm d od)
   (let* ((value (oret:value d))
          (args (get-argsn 2))
          )
-      (run (docker rm ,@args))
+      (& (docker rm ,@args))
     ))
 
 (define (docker-run d od)
   (let* ((value (oret:value d))
          (args (get-argsn 2))
          )
-    (run (docker run --rm -it ,@args ))
+    (& (docker run --rm -it ,@args ))
     ))
 
 (define (docker-exec d od)
   (let* ((value (oret:value d))
          (args (get-argsn 2))
          )
-    (run (docker exec -it ,@args ))
+    (& (docker exec -it ,@args ))
     ))
 
 (define (docker-sh d od)
   (let* ((value (oret:value d)))
-    (run (docker exec -it ,value /bin/sh))
+    (& (docker exec -it ,value /bin/sh))
     ))
 
 (define (docker-cid image)
@@ -91,40 +91,40 @@
     cid))
 
 (define (docker-images d od)
-  (run (docker images)))
+  (& (docker images)))
 
 (define (docker-build d od)
-  (run (docker build)))
+  (& (docker build)))
 
 (define (docker-clean d od)
-  (run (| (docker ps -a)
+  (& (| (docker ps -a)
           (grep "Exited")
           (awk "{print $1}")
           (xargs docker stop)))
-  (run (| (docker ps -a)
+  (& (| (docker ps -a)
           (grep "Exited")
           (awk "{print $1}")
           (xargs docker rm)))
-  (run (| (docker images)
+  (& (| (docker images)
           (grep none)
           (awk "{print $3}")
           (xargs docker rmi))))
 
 (define (run-composer d od)
   (let ( (cmd (default-phc-cmd d)))
-    (run (docker run --rm -it -v ,(string-append (cwd) ":/data") yarec/composer composer ,cmd))
+    (& (docker run --rm -it -v ,(string-append (cwd) ":/data") yarec/composer composer ,cmd))
     ))
 
 (define (run-mycli d od)
   (let ( (args (get-argsn 2))
         )
-   (run (docker run --rm -it diyan/mycli ,@args))
+   (& (docker run --rm -it diyan/mycli ,@args))
    ))
 
 (define (docker-mount d od)
-  (run (vboxmanage sharedfolder add dev --name "upg" --hostpath "/upg" --transient))
-  (run (docker-machine ssh dev "sudo mkdir -p /upg"))
-  (run (docker-machine ssh dev "sudo mount -t vboxsf  upg /upg"))
+  (& (vboxmanage sharedfolder add dev --name "upg" --hostpath "/upg" --transient))
+  (& (docker-machine ssh dev "sudo mkdir -p /upg"))
+  (& (docker-machine ssh dev "sudo mount -t vboxsf  upg /upg"))
   )
 
 
@@ -136,12 +136,12 @@
          ;;(cid (docker-cid image))
          )
    (if (string=? "ps" value) 
-     (run (| (docker ps)
+     (& (| (docker ps)
              (grep -v "CONTAINER ID")
              (awk "{print $1}")
              (xargs docker stop)))
 
-     (run (| (docker ps)
+     (& (| (docker ps)
              (grep -v "CONTAINER ID")
              (grep ,value)
              (awk "{print $1}")
