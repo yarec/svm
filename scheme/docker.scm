@@ -59,6 +59,7 @@
   (let* ((value (oret:value d))
          (args (get-argsn 2))
          )
+      (run (docker stop ,@args))
       (& (docker rm ,@args))
     ))
 
@@ -67,6 +68,13 @@
          (args (get-argsn 2))
          )
     (& (docker run --rm -it ,@args ))
+    ))
+
+(define (docker-log d od)
+  (let* ((value (oret:value d))
+         (args (get-argsn 2))
+         )
+    (& (docker logs -f ,@args ))
     ))
 
 (define (docker-exec d od)
@@ -113,6 +121,13 @@
 (define (run-composer d od)
   (let ( (cmd (default-phc-cmd d)))
     (& (docker run --rm -it -v ,(string-append (cwd) ":/data") yarec/composer composer ,cmd))
+    ))
+
+(define (run-php d od)
+  (let ( (args (get-argsn 2)))
+    (& 
+     (docker run -p 9000:9000 ,@args php:5.6-fpm-alpine)
+     )
     ))
 
 (define (run-mycli d od)
@@ -171,12 +186,14 @@
       (--rm           rm|s|t " rm   containers           "  ,docker-rm)
       (--ps           ps|s|t " show containers           "  ,docker-ps)
       (--run         run|s|t " run                       "  ,docker-run)
+      (--log         log|s|t " show logs                 "  ,docker-log)
       (--exec         ex|s|t " exec                      "  ,docker-exec)
       (--sh           sh|s|t " exec /bin/sh              "  ,docker-sh)
       (--stop       stop|s|t " stop container            "  ,docker-stop)
       (--build         b|s|t " build image               "  ,docker-build)
       (--clean     clean|s|t " clean none c imgs         "  ,docker-clean)
       (----------- -      "                           "  ,-)
+      (--php         php|s|t " run php                   "  ,run-php)
       (--composer    phc|s|t " run composer              "  ,run-composer)
       (--mycli     mycli|s|t " run mycli (mysql client)  "  ,run-mycli)
       (----------- -      "                           "  ,-)
