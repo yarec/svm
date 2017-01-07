@@ -45,6 +45,13 @@
 (define (compose-up d od)
   (& (docker-compose up)))
 
+(define (compose-restart d od)
+  (let* ((value (oret:value d)))
+    (if (string=? value "") 
+      (& (echo service name required!))
+      (& (docker-compose restart ,value))))
+  )
+
 (define (compose-build d od)
   (& (docker-compose build)))
 
@@ -93,6 +100,13 @@
 (define (docker-sh d od)
   (let* ((value (oret:value d)))
     (& (docker exec -it ,value /bin/sh))
+    ))
+
+(define (docker-ip d od)
+  (let* ((value (oret:value d)))
+    (run (| (docker inspect ,value )
+            (grep IPAddress)
+            ))
     ))
 
 (define (docker-cid image)
@@ -183,7 +197,7 @@
       (--mstart   mstart|s|t " machine start             "  ,machine-start)
       (--mstop     mstop|s|t " machine stop              "  ,machine-stop)
       (--mrestart  mrest|s|t " machine restart           "  ,machine-restart)
-      (--ip           ip|s|t " machine ip                "  ,machine-ip)
+      (--mip         mip|s|t " machine ip                "  ,machine-ip)
       (--env         env|s|t " machine env               "  ,machine-env)
       (--ssh         ssh|s|t " machine ssh               "  ,machine-ssh)
       (--mount       mnt|s|t " mount share dir           "  ,docker-mount)
@@ -196,6 +210,7 @@
       (--log         log|s|t " show logs                 "  ,docker-log)
       (--exec         ex|s|t " exec                      "  ,docker-exec)
       (--sh           sh|s|t " exec /bin/sh              "  ,docker-sh)
+      (--ip           ip|s|t " show ip                   "  ,docker-ip)
       (--stop       stop|s|t " stop container            "  ,docker-stop)
       (--build         b|s|t " build image               "  ,docker-build)
       (--clean     clean|s|t " clean none c imgs         "  ,docker-clean)
@@ -205,6 +220,7 @@
       (--mycli     mycli|s|t " run mycli (mysql client)  "  ,run-mycli)
       (----------- -      "                           "  ,-)
       (--up           up     " compose up                "  ,compose-up)
+      (--cr           cr|s|t " compose restart           "  ,compose-restart)
       (--cbuild       cb     " build service             "  ,compose-build)
       (--debug        -d||f  " debug                     "  #f)
       (--default      -      " default action            "  ,get-opt-usage)
