@@ -144,6 +144,11 @@
     ))
 
 (define (run-php d od)
+  (let ( (args (get-argsn 2)) )
+    (& (echo docker run --rm -it -v ,(string-append (cwd) ":/data") yarec/php:cli ,@args))
+    ))
+
+(define (run-phpd d od)
   (let ( (args (get-argsn 2)))
     (& 
      (docker run -p 9000:9000 ,@args php:5.6-fpm-alpine)
@@ -215,6 +220,7 @@
       (--build         b|s|t " build image               "  ,docker-build)
       (--clean     clean|s|t " clean none c imgs         "  ,docker-clean)
       (----------- -      "                           "  ,-)
+      (--phpd       phpd|s|t " run phpd                  "  ,run-phpd)
       (--php         php|s|t " run php                   "  ,run-php)
       (--composer    phc|s|t " run composer              "  ,run-composer)
       (--mycli     mycli|s|t " run mycli (mysql client)  "  ,run-mycli)
