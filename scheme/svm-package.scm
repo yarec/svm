@@ -6,7 +6,7 @@
   (files opt utils 
          docker
          emacs vim 
-         brunch luminus composer sencha
+         brunch luminus descjop composer sencha
          rsh esh upg 
          svn
          os lnmp ins 

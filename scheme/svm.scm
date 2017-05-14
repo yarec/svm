@@ -51,6 +51,7 @@
       (--vim       -     " [vv]    vim               " , vim)
       (--brunch    -     " [bh]    for brunch        " , brunch)
       (--luminus   -     " [lum]   for luminus       " , luminus)
+      (--descjop   -     " [dcj]   for descjop       " , descjop)
       (--composer  -     " [phc]   for composer      " , composer)
       (--sencha    -     " [sen]   for sencha        " , sencha)
       (--rsh       -     " [rsh]   ssh login         " , rsh)
