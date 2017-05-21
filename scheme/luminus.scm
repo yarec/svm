@@ -9,6 +9,11 @@
          (appname (if (string=? value "") "lapp" value)))
     (run (lein new luminus ,appname +mysql +site +http-kit))))
 
+(define (new-with-reframe d od)
+  (let* ((value (oret:value d))
+         (appname (if (string=? value "") "lapp" value)))
+    (run (lein new luminus ,appname +re-frame))))
+
 (define (new-with-full d od)
   (let* ((value (oret:value d))
          (appname (if (string=? value "") "lapp" value)))
@@ -35,6 +40,7 @@
       (--new-lum      -n|s|t " new luminus               "  ,new-luminus)
       (--new-lum-full -N|s|t " new luminus with full     "  ,new-with-full)
       (--new-with-m   -m|s|t " new luminus with mysql    "  ,new-with-mysql)
+      (--new-with-re  -R|s|t " new luminus with re-frame "  ,new-with-reframe)
       (--run          -r     " run and watch             "  ,run-lein-ring)
       (--fig          -f     " run figwheel              "  ,run-figwheel)
       (--jar          -j     " build exec jar            "  ,run-lein-jar)
