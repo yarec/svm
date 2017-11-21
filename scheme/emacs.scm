@@ -1,6 +1,6 @@
 
 (define (start-emacs d od)
-  (git-clone "https://github.com/purcell/emacs.d" (string-append (home-dir) "/.emacs.d"))
+  (git-clone "https://github.com/syl20bnr/spacemacs.git" (string-append (home-dir) "/.emacs.d"))
   (if (string=? "mac\n" os-type) 
     (& (emacs))
     (& (emacs --no-window-system))
