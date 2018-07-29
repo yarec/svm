@@ -1,6 +1,6 @@
 
 (define (start-rsh data oret-data)
-  (let* ((len (length command-line-arguments)) 
+  (let* ((len (length command-line-arguments))
          (rsh-conf (get-conf 'rsh))
          (arg-2nd (get-arg-2nd)))
     (if (string=? "" arg-2nd)
@@ -22,7 +22,7 @@
 
 
 (define (rsh data oret-data)
-  (get-opt 
+  (get-opt
     `(
       (--default      -      " default action            "  ,start-rsh)
       (--help         -h     " bprint this usage message "  ,get-opt-usage))))

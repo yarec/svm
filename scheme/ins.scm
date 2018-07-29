@@ -1,6 +1,6 @@
 (define (install-lein d od)
   (let ((tmp-file"/tmp/lein"))
-    (run (curl -kL "https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein") 
+    (run (curl -kL "https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein")
          (> 1 ,tmp-file))
     (run (chmod +x ,tmp-file))
     (root-run `(mv ,tmp-file /usr/bin/lein))))
@@ -20,7 +20,7 @@
   (let* ((nvm-install-url "https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh"))
     (if (has-no-cmd "nvm")
       (begin
-        (run (| (curl ,nvm-install-url) 
+        (run (| (curl ,nvm-install-url)
                 (sh)))))))
 
 (define (install-brew d od)
@@ -31,7 +31,7 @@
     (if (file-exists? "/usr/bin/phpbrew")
       (cout "/usr/bin/phpbrew exists")
       (begin
-        (run (curl -kL "https://raw.github.com/c9s/phpbrew/master/phpbrew") 
+        (run (curl -kL "https://raw.github.com/c9s/phpbrew/master/phpbrew")
              (> 1 ,tmp-phpbrew))
         (run (chmod +x ,tmp-phpbrew))
         (root-run `(mv ,tmp-phpbrew /usr/bin/phpbrew))
@@ -42,7 +42,7 @@
 
 (define (install-composer d od)
   (let ((tmp-file"/tmp/composer"))
-    (run (curl -kL "https://getcomposer.org/installer") 
+    (run (curl -kL "https://getcomposer.org/installer")
          (> 1 ,tmp-file))
     (run (php ,tmp-file))
     (root-run `(mv "composer.phar" /usr/bin/composer))))
@@ -66,7 +66,7 @@
     (root-run `(mv ,dpath "/usr/bin/ack"))))
 
 (define (install-docker d od)
-  (let ((install-docker-ubuntu 
+  (let ((install-docker-ubuntu
           (lambda ()
             (let ((docker-install-url "https://get.docker.io/ubuntu/"))
               (if (has-no-cmd "docker")
@@ -74,11 +74,11 @@
                 (root-run `(curl ,docker-install-url -o /tmp/ins-docker))
                 (root-run `(bash /tmp/ins-docker))
                 )))))
-        (install-docker-centos 
+        (install-docker-centos
           (lambda ()
             (run (svm --install epel))
             (pkg-install '(docker-io)))))
-    (cond 
+    (cond
       ((string=? os-type "debian\n") (install-docker-ubuntu))
       ((string=? os-type "redhat\n") (install-docker-centos)))))
 
@@ -161,29 +161,29 @@
 ;; RPM install
 ;; http://mirrors.163.com/.help/CentOS6-Base-163.repo
 (define (install-rpmforge d od)
-  (rpm-repo-install 
-    "rpmforge" 
+  (rpm-repo-install
+    "rpmforge"
     "http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm"))
 
 (define (install-epel d od)
-  (rpm-repo-install 
-    "epel" 
+  (rpm-repo-install
+    "epel"
     "http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm"))
 
 (define (install-pyqt4 d od)
-  (run (sudo apt-get install 
-        libxext6 libxext-dev libqt4-dev libqt4-gui libqt4-sql 
+  (run (sudo apt-get install
+        libxext6 libxext-dev libqt4-dev libqt4-gui libqt4-sql
         qt4-dev-tools qt4-doc qt4-designer qt4-qtconfig "python-qt4-*" python-qt4
         ;libqwt5-qt4 libqwt5-qt4-dev
         ;qdevelop
         )))
 
 (define (install-kernel-dev d od)
-  (let* ((pkgs (cond 
-                 ((string=? os-type "debian\n") 
+  (let* ((pkgs (cond
+                 ((string=? os-type "debian\n")
                   '(linux-headers-generic
                      ))
-                 ((string=? os-type "redhat\n") 
+                 ((string=? os-type "redhat\n")
                   '(kernel-dev glibc-static
                      ))))
          )
@@ -204,12 +204,12 @@
                     (run (mkdir -p cm5/redhat/6/x86_64))
                     (root-run `(ln -s ,(string-append repo-dir "/cm") "cm5/redhat/6/x86_64/cm"))))
 
-        (run (ssh ,(string-append "root@192.168.1." n)) 
+        (run (ssh ,(string-append "root@192.168.1." n))
              (< ,(string-append svm-path "/shell/cm_cfg_centos.sh"))
              (= 2 1))))))
 
 ;; mkdir /opt/svn/repos
-;; svnadmin create --fs-type fsfs /opt/svn/repos 
+;; svnadmin create --fs-type fsfs /opt/svn/repos
 ;; svnserve -d -r /opt/svn/repos --listen-port 3391
 ;; config :
 ;;     passwd
@@ -265,12 +265,12 @@ EOF
 (define (install-sys-pkg d od)
   (let ((len (length command-line-arguments))
         (pkgs (cdr command-line-arguments)))
-    (if (> len 1) 
+    (if (> len 1)
       (pkg-install pkgs)
       (get-opt-usage 0 0))))
 
 (define (install d od)
-  (get-opt 
+  (get-opt
     `(
       (lein        -      "                           "  ,install-lein)
       (petite      -      "                           "  ,install-petite)
@@ -285,7 +285,7 @@ EOF
       (docker      -      "                           "  ,install-docker)
       (cm          -      "                           "  ,install-cm)
       (----------- -      "                           "  ,-)
-      ;libs 
+      ;libs
       (freetds     -      "                           "  ,install-freetds)
       (openssl     -      "                           "  ,install-openssl)
       (pcre        -      "                           "  ,install-pcre)

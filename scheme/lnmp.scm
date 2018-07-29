@@ -14,8 +14,8 @@
   (if (string=? os-type "redhat")
     (run (svm --install rpmforge)))
 
-  (let* ((pkgs (cond 
-                 ((string=? os-type "debian\n") '(php5 
+  (let* ((pkgs (cond
+                 ((string=? os-type "debian\n") '(php5
                                                    libxml2-dev libmcrypt-dev libxslt-dev
                                                    libcurl4-openssl-dev libssl-dev
                                                    libreadline-dev))
@@ -35,7 +35,7 @@
     (run (phpbrew install ,ver
                   +default +fpm +mysql +pdo))
     )
-  
+
 
   (out #<<EOF
 #--------------------------
@@ -64,7 +64,7 @@ EOF
   )
 
 (define (install-php-imagick d od)
-  (run (yum install ImageMagick-devel)) 
+  (run (yum install ImageMagick-devel))
   (run (phpbrew ext install imagick)))
 
 (define (install-cherokee d od)
@@ -78,8 +78,8 @@ EOF
         (dir "mariadb-10.0.12"))
     (run (svm --install openssl))
     (pkg-install '(g++ gcc-c++.x86_64
-                       cmake  
-                       zlib1g-dev zlib-dev 
+                       cmake
+                       zlib1g-dev zlib-dev
                        libncurses5-dev ncurses-dev))
     (receive (fname rdir)
              (get-src durl file dir)
@@ -92,7 +92,7 @@ EOF
          (file "nginx-1.6.1.tar.gz" )
          (dir "nginx-1.6.1")
          (arg-3rd (get-arg-3rd))
-         (dist (if (string=? "" arg-3rd) 
+         (dist (if (string=? "" arg-3rd)
                  (string-append svm-dist "/nginx")
                  arg-3rd))
          (prefix (string-append "--prefix=" dist))
@@ -111,7 +111,7 @@ EOF
                        ))))
 
 (define (lnmp d od)
-  (get-opt 
+  (get-opt
     `(
       (--ins-php              -p|s|t " install php               "  ,install-php)
       (--ins-imagick          -      " install php ext imagick   "  ,install-php-imagick)

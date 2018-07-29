@@ -1,10 +1,10 @@
-(define svm-conf 
-  `((rsh 
+(define svm-conf
+  `((rsh
       ((name ip user "pass" port)
        (name ip user "pass")))
-    (vim 
+    (vim
       ((openlist (/upg))))
-    (upg 
+    (upg
       ((account (bkt "user" "pass"))
        (ignore  (cnchess
                   eleeye
@@ -14,7 +14,7 @@
                   s48-stable))))
     (git-push ((repos1 ("/ws/repo1" "/ws/repo2"))
                (repos2 ("/ws/repo1" "/ws/repo2"))))
-    (esh 
+    (esh
       (test (echo 1)
             (echo 2)
             (echo 3))
@@ -37,20 +37,20 @@
                    (sort -h))))
 
       ;;; os init
-      (base (sudo apt-get -y install 
+      (base (sudo apt-get -y install
                   curl vim-gnome expect zsh ctags cscope
-                  yakuake axel 
-                  ;easystroke 
+                  yakuake axel
+                  ;easystroke
                   mercurial git colordiff))
 
-      (lnmp (sudo apt-get -y install 
+      (lnmp (sudo apt-get -y install
                   nginx php5-cli php5-fpm mysql-server php5-mysql))
 
-      (apps (sudo apt-get -y install 
+      (apps (sudo apt-get -y install
                   virtualbox-qt chromium-browser))
 
       (mzsh (run (| (sudo apt-get -y install zsh)
-                    (curl -L http://install.ohmyz.sh) 
+                    (curl -L http://install.ohmyz.sh)
                     (sudo sh))))
 
       (nvm  (run (| (curl -L https://raw.githubusercontent.com/creationix/nvm/v0.8.0/install.sh)

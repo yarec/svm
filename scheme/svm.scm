@@ -33,7 +33,7 @@
   (let ((conf-file (string-append (home-dir) "/.svm/conf/svm-conf.scm")))
     (if (file-exists? conf-file) (load conf-file)))
   (setenv "SVM_PATH" svm-path)
-  (get-opt 
+  (get-opt
     `(
       ;      (--t1 -       "  b   #t "  ,get-opt-usage)
       ;      (--t2 -t2     "  b   #t "  ,get-opt-usage)

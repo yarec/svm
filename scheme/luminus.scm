@@ -31,7 +31,7 @@
 
 (define (run-figwheel d od)
   (run (lein figwheel)))
-    
+
 (define (run-lein-jar d od)
   (run (lein uberjar)))
 

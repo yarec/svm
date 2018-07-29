@@ -2,7 +2,7 @@
   (cdr (car (get-conf 'esh))))
 
 (define (start-esh d od)
-  (let* ((len (length command-line-arguments)) 
+  (let* ((len (length command-line-arguments))
          (arg-2nd (get-arg-2nd)))
     (if (string=? "" arg-2nd)
       (esh-list-cmds d od)
@@ -16,7 +16,7 @@
                 (get-esh-cmds)))))
 
 (define (esh-list-cmds d od)
-  (for-each (lambda (x) 
+  (for-each (lambda (x)
               (cout (car x)))
             (get-esh-cmds)))
 
@@ -28,7 +28,7 @@
          (db (get-argn 4))
          (user (get-argn 5))
          (pwd (get-argn 6)))
-    (if (file-not-exists? dir) 
+    (if (file-not-exists? dir)
       (run (mkdir -p ,dir)))
     (run (mongodump -h ,host -d ,db -u ,user -p ,pwd -o ,dir1))
     (run (tar cvzf ,tar_name ,dir1))))
@@ -52,7 +52,7 @@
     (for-each push-repos repos)))
 
 (define (esh data oret-data)
-  (get-opt 
+  (get-opt
     `(
       (--list         -l      " list cmds                 "  ,esh-list-cmds)
       (--backup-mdb   -       " backup mangolab db        "  ,bakup-mdb)

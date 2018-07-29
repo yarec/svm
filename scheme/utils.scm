@@ -12,7 +12,7 @@
 
 (define (is-not-root) (not (is-root)))
 
-(define (root-run cmd) 
+(define (root-run cmd)
   (if (is-not-root)
     (run ,(append '(sudo) cmd))
     (run ,cmd)))
@@ -29,7 +29,7 @@
 
 (define (pkg-install pkg-name)
   (let* ((ins-cmd (lambda ()
-                    (cond 
+                    (cond
                       ((string=? os-type "debian\n") '(apt-get -q install ))
                       ((string=? os-type "redhat\n") '(yum -y install )))))
          (centos-pkg-name (lambda (name)
@@ -41,7 +41,7 @@
          (get-pkg-name (lambda (in-name)
                          (let ((name (if (symbol? in-name)
                                        (symbol->string in-name) in-name)))
-                           (cond 
+                           (cond
                              ((string=? os-type "debian\n") name)
                              ((string=? os-type "redhat\n") (centos-pkg-name name))))))
          (run-ins (lambda (pkgs)
@@ -60,7 +60,7 @@
                                  (grep ,name))))
         (dpath "/tmp/tmp.rpm"))
     (if (string=? "" grep-str)
-      (begin 
+      (begin
         (download url dpath)
         (root-run `(rpm -ivh ,dpath))))))
 
@@ -94,9 +94,9 @@
 ;;
 (define (download1 durl abs-fname f)
   (if (or (file-not-exists? abs-fname) f)
-    (begin 
+    (begin
       (cout (string-append "get from : " durl))
-      (run (curl -o ,abs-fname --progress-bar -kL ,durl) 
+      (run (curl -o ,abs-fname --progress-bar -kL ,durl)
            (= 2 1)))
     (out (string-append abs-fname " exists!"))))
 
@@ -118,12 +118,12 @@
 ;; svm-conf
 (define svm-conf '())
 (define (get-conf name)
-  (filter (lambda (x) 
+  (filter (lambda (x)
             (equal? name (car x)))
           svm-conf))
 (define (get-conf-str1 lst)
   (let* ((name (car lst)))
-    (cond 
+    (cond
       ((number? name) (number->string name))
       ((symbol? name) (symbol->string name)))))
 

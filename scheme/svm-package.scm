@@ -1,13 +1,13 @@
-(define-structure 
+(define-structure
   svm svm-interface
-  (open scsh-user 
+  (open scsh-user
         srfi-6
         define-record-types)
-  (files opt utils 
+  (files opt utils
          docker
-         emacs vim 
+         emacs vim
          brunch luminus descjop composer sencha
-         rsh esh upg 
+         rsh esh upg
          svn
-         os lnmp ins 
+         os lnmp ins
          svm))

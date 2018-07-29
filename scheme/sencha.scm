@@ -3,7 +3,7 @@
 )
 
 (define (new-extjs-model d od)
-  (let* ((value (oret:value d)) 
+  (let* ((value (oret:value d))
          (opt-base (get-opt-item "--base" od))
          (base (if (string=? opt-base "") "Ext.data.Model" opt-base))
          (opt-fields (get-opt-item "--fields" od))
@@ -13,13 +13,13 @@
     ))
 
 (define (new-extjs-controller d od)
-  (let* ((value (oret:value d)) 
+  (let* ((value (oret:value d))
          )
     (run (sencha generate controller ,value))
     ))
 
 (define (new-extjs-view d od)
-  (let* ((value (oret:value d)) 
+  (let* ((value (oret:value d))
          (opt-base (get-opt-item "--base" od))
          (base (if (string=? opt-base "") "Ext.panel.Panel" opt-base))
          )
@@ -30,7 +30,7 @@
   (run (sencha app watch)))
 
 (define (sencha d od)
-  (get-opt 
+  (get-opt
     `(
       (--new-app      -n|s|t " new extjs app ex: sen -n [app]                 " , new-extjs-app)
       (--new-m        -m|s|t " new m ex: sen -m User [-b MyApp.Base -f id:int] " , new-extjs-model)

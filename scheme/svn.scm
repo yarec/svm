@@ -1,5 +1,5 @@
 (define (pub-svn d od)
-  (let* ((value (oret:value d)) 
+  (let* ((value (oret:value d))
          (rev (if (string=? value "") "PREV" value))
          (auther (get-argn 4))
          (svn-files (run/string (,(string-append svm-path "/shell/svn.sh") ,rev ,auther)))
@@ -17,7 +17,7 @@
   )
 
 (define (svn data oret-data)
-  (get-opt 
+  (get-opt
     `(
       (--pub          -p|s|t " publish svn files         "  ,pub-svn)
       (--debug        -d||f  " debug                     "  #f)

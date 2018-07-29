@@ -1,5 +1,5 @@
 (define (new-descjop d od)
-  (let* ((value (oret:value d)) 
+  (let* ((value (oret:value d))
          (appname (if (string=? value "") "dcjapp" value))
          (opts (get-argsn 3)))
     (run (lein new descjop ,appname ,@opts))))
@@ -28,7 +28,7 @@
   (run (lein descjop-uberapp-osx)))
 
 (define (descjop data oret-data)
-  (get-opt 
+  (get-opt
     `(
       ;(--new-dcj      -n|s|t " new descjop               "  ,new-descjop)
       (--new-dcj-r    -N|s|t " new descjop with reagent  "  ,new-descjop-with-reagent)

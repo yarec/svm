@@ -1,4 +1,4 @@
-;; get-opt 
+;; get-opt
 (define (get-arg-2nd)
   (let ((len (length command-line-arguments)))
     (if (>= len 2)
@@ -12,7 +12,7 @@
 (define (get-argn n)
   (let ((len (length command-line-arguments)))
     (if (>= len n)
-      (cond 
+      (cond
         ((equal? n 1) (car command-line-arguments))
         ((equal? n 2) (cadr command-line-arguments))
         ((equal? n 3) (caddr command-line-arguments))
@@ -25,7 +25,7 @@
 (define (get-argsn n)
   (let ((len (length command-line-arguments)))
     (if (>= len n)
-      (cond 
+      (cond
         ((equal? n 2) (cddr command-line-arguments))
         ((equal? n 3) (cdddr command-line-arguments))
         ((equal? n 4) (cddddr command-line-arguments))
@@ -49,18 +49,18 @@
   (opt oret:opt set-oret!:opt))
 
 (define (get-opt-usage data oret-list)
-  (cout (string-append 
+  (cout (string-append
          "----------------------\n"
          " | options for " (if (string=? (get-argn 1) "") "svm" (get-argn 1)) ":\n"
          "----------------------"))
   (let ((ls '())
         (max-len 0))
-    (for-each 
+    (for-each
       (lambda (opt)
         (let* ((arg-name (symbol->string (car opt)))
                (short-name (car (str-split (symbol->string (cadr opt)) #\|)))
                (desc (caddr opt))
-               (line (string-append 
+               (line (string-append
                       "  "
                        (if (not (equal? short-name "-"))
                          (string-append short-name " ")
@@ -71,13 +71,13 @@
           (if (> len max-len)
             (set! max-len len))))
       get-opt-desc-opts)
-    (for-each 
+    (for-each
       (lambda (l)
         (let* ((line (car l))
                (desc (cdr l))
                (len (- max-len (string-length line)))
-               (out-blank 
-                 (lambda (i) 
+               (out-blank
+                 (lambda (i)
                    (let lp ((i i))
                      (display " ")
                      (if (> i 0)
@@ -85,7 +85,7 @@
           (display line)
           (out-blank len)
           (display desc)
-          (display "\n"))) 
+          (display "\n")))
       (reverse ls))))
 
 (define (get-opt-parse args desc-opts)
@@ -97,8 +97,8 @@
             (rest (if (null? args) '() (cdr args))))
         ;(display args)(display "\n")
         (if (not (null? arg))
-          (for-each 
-            (lambda (desc-opt) 
+          (for-each
+            (lambda (desc-opt)
               (let* ((arg-name (symbol->string (car desc-opt)))
                      (short-name-pair (str-split (symbol->string (cadr desc-opt)) #\|))
                      (short-name (car short-name-pair))
@@ -107,26 +107,26 @@
                              (cadr short-name-pair)))
                      (ismode (cond ((equal? arg-length 1) #t)
                                    ((equal? arg-length 2) #f)
-                                   ((equal? arg-length 3) 
+                                   ((equal? arg-length 3)
                                     (if (equal? (caddr short-name-pair) "t") #t #f))))
                      (desc (caddr desc-opt))
                      (handler (cadddr desc-opt))
                      (ok (if (or (equal? arg-name arg)
                                  (equal? short-name arg)) #t #f))
-                     (value (if (equal? type "b") "" 
-                              (let ((val (if (null? rest) "" 
+                     (value (if (equal? type "b") ""
+                              (let ((val (if (null? rest) ""
                                            (car rest))))
                                 (if (and (not (null? rest)) ok)
                                   (set! rest (cdr rest)))
                                 val)))
                      (vals (oret ok value type ismode arg-name handler desc-opt)))
 ;                (for-each (lambda (x) (display " ")(display x))
-;                          `(,(length short-name-pair) 
+;                          `(,(length short-name-pair)
 ;                             " | arg: "        , arg    " | short-name: " , short-name
 ;                             " | ok: "         , ok     " | arg-name: "   , arg-name
 ;                             " | type: "       , type   " | type=b?: "    , (equal? type "b")
 ;                             " | ismode: "     , ismode " | desc: "       , desc "\n"))
-                (if ok (begin (if ismode 
+                (if ok (begin (if ismode
                                 (if (not mode)
                                   (begin
                                     (set! mode vals)
@@ -145,13 +145,13 @@
               (set! has-mode #t)
               (apply (oret:handler dat) `(,dat ,oret-list) ))))
     (let ((lst '()))
-      (for-each 
+      (for-each
         (lambda (dat)
           (if (oret:ismode dat)
             (f dat)))
         oret-list)
       (if (not has-mode)
-        (for-each (lambda (opt) 
+        (for-each (lambda (opt)
                     (let ((name (car opt))
                           (handler (cadddr opt)))
                       (if (equal? name '--default)

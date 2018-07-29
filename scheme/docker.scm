@@ -47,7 +47,7 @@
 
 (define (compose-restart d od)
   (let* ((value (oret:value d)))
-    (if (string=? value "") 
+    (if (string=? value "")
       (& (echo service name required!))
       (& (docker-compose restart ,value))))
   )
@@ -58,19 +58,19 @@
 ;; docker
 (define (docker-ps d od)
   (let* ((value (oret:value d)))
-    (if (string=? value "") 
+    (if (string=? value "")
       (& (docker ps))
       (& (docker ps ,value)))))
 
 (define (docker-stat d od)
   (let* ((value (oret:value d)))
-    (if (string=? value "") 
+    (if (string=? value "")
      (run (|
             (docker ps)
             (sed -n "2,$p")
             (awk "{print $NF}")
             (xargs docker stats
-                   )))))) 
+                   ))))))
 
 (define (docker-rm d od)
   (let* ((value (oret:value d))
@@ -83,7 +83,7 @@
 (define (docker-rm-none-image d od)
   (let* ((value (oret:value d))
          (args (get-argsn 2))
-         (line (run/string 
+         (line (run/string
                  (docker images -f "dangling=true" -q))))
     (run (| (echo ,line)
             (xargs docker rmi)
@@ -129,7 +129,7 @@
     ))
 
 (define (docker-cid image)
-  (let* ((line (run/string 
+  (let* ((line (run/string
                  (| (docker ps)
                     (grep ,image))))
          (strs (str-split line #\space))
@@ -169,7 +169,7 @@
 
 (define (run-phpd d od)
   (let ( (args (get-argsn 2)))
-    (& 
+    (&
      (docker run -p 9000:9000 ,@args php:5.6-fpm-alpine)
      )
     ))
@@ -179,6 +179,39 @@
         )
    (& (docker run --rm -it diyan/mycli ,@args))
    ))
+
+(define (manage-box d od)
+  (let* ((args (get-argsn 2))
+         (cmd  (get-argn 3))
+         (item (get-argn 4))
+         (scmd (string->symbol cmd))
+         (box-dir (string-append (home-dir) "/.docker-box"))
+         )
+    (case scmd
+      ((init) (let* ((repo-url "https://github.com/yarec/docker-box"))
+                (git-clone repo-url box-dir)
+                (with-cwd box-dir
+                  (& (make)))
+                (cout repo-url)
+                ))
+      ((start) (with-cwd box-dir
+                 (& (docker-compose -f docker-compose.yml
+                                    -f dns.yml
+                                    -f php.yml
+                                    -f php5.yml
+                                    -f mysql.yml
+                                    up
+                                    )
+                    )
+                 ))
+      ((reload) (with-cwd box-dir
+                  (& (docker-compose -f docker-compose.yml
+                                     restart openresty
+                                     ))
+                  ))
+      (else "")
+      )
+    ))
 
 (define (docker-mount d od)
   (& (vboxmanage sharedfolder add dev --name "upg" --hostpath "/upg" --transient))
@@ -194,7 +227,7 @@
          ;;(image (or-str value "yarec/ornginx"))
          ;;(cid (docker-cid image))
          )
-   (if (string=? "ps" value) 
+   (if (string=? "ps" value)
      (& (| (docker ps)
              (grep -v "CONTAINER ID")
              (awk "{print $1}")
@@ -214,7 +247,7 @@
     ))
 
 (define (docker data oret-data)
-  (get-opt 
+  (get-opt
     `(
       (--ls           ls     " machine ls                "  ,machine-ls)
       (--create   create|s|t " machine create            "  ,machine-create)
@@ -246,6 +279,7 @@
       (--composer    phc|s|t " run composer              "  ,run-composer)
       (--mycli     mycli|s|t " run mycli (mysql client)  "  ,run-mycli)
       (----------- -         " ---Docker Compose---      "  ,-)
+      (--box          box    " manage box                "  ,manage-box)
       (--up           up     " compose up                "  ,compose-up)
       (--cr           cr|s|t " compose restart           "  ,compose-restart)
       (--cbuild       cb     " build service             "  ,compose-build)

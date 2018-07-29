@@ -30,7 +30,7 @@ EOF
       (let* ((mat (regexp-search re repos-str start))
              (sub (lambda (idx)
                     (match:substring mat idx)))
-             (end (lambda () 
+             (end (lambda ()
                     (match:end mat)))
              (pos (end)))
         (if mat
@@ -76,11 +76,11 @@ EOF
       (if (not (null? rest))
         (loop rest)))))
 
-(define upg-repos 
+(define upg-repos
  (if (file-exists? "/upg")
    (directory-files "/upg") '()))
 (define (upg-status)
-  (for-each (lambda (x) 
+  (for-each (lambda (x)
               (let* ((repo (string-append "/upg/" x))
                      (git-dir (string-append repo "/.git"))
                      (hg-dir (string-append repo "/.hg")))
@@ -93,7 +93,7 @@ EOF
 
 (define (upg-check cmd)
   (let ((baseurl "ssh://hg@bitbucket.org/yarec/"))
-    (for-each (lambda (x) 
+    (for-each (lambda (x)
                 (let* ((repo (string-append "/upg/" x))
                        (repourl  (string-append baseurl x))
                        (hg-dir (string-append repo "/.hg")))
@@ -109,7 +109,7 @@ EOF
   (upg-check '(outgoing --quiet --template "{node}")))
 
 (define (start-upg data oret-data)
-  (let* ((len (length command-line-arguments)) 
+  (let* ((len (length command-line-arguments))
          (upg-conf (get-conf 'upg))
          (up     (cadr (car (cadr (car upg-conf)))))
          (ignore (cadr (cadr (cadr (car upg-conf)))))
@@ -117,7 +117,7 @@ EOF
          (pass (caddr up))
          (arg-2nd (string->symbol (get-arg-2nd))))
     (case arg-2nd
-      ((pullall) (let ((repos-str 
+      ((pullall) (let ((repos-str
                          (run/string (| (curl --user ,(string-append user ":" pass)
                                               https://bitbucket.org/api/1.0/user/repositories)
                                         (,(string-append svm-path "/shell/JSON.sh") -l)
@@ -132,7 +132,7 @@ EOF
 
 
 (define (upg data oret-data)
-  (get-opt 
+  (get-opt
     `(
       (--default      -      " default action            "  ,start-upg)
       (--help         -h     " bprint this usage message "  ,get-opt-usage))))
