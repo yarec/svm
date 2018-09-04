@@ -215,7 +215,7 @@
                     )
                  ))
       ((reload) (with-cwd box-dir
-                  (& (docker-compose -f docker-compose.yml
+                  (& (docker-compose -f network.yml -f ngx.yml
                                      restart openresty
                                      ))
                   ))
