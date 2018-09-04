@@ -204,7 +204,8 @@
                 (cout repo-url)
                 ))
       ((start) (with-cwd box-dir
-                 (& (docker-compose -f docker-compose.yml
+                 (& (docker-compose -f network.yml
+                                    -f ngx.yml
                                     -f dns.yml
                                     -f php.yml
                                     -f php5.yml
