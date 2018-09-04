@@ -191,12 +191,16 @@
          (item (get-argn 4))
          (scmd (string->symbol cmd))
          (box-dir (string-append (home-dir) "/.docker-box"))
+         (sample-files (string-append box-dir "/samples/"))
          )
     (case scmd
       ((init) (let* ((repo-url "https://github.com/yarec/docker-box"))
                 (git-clone repo-url box-dir)
                 (with-cwd box-dir
-                  (& (make)))
+                  (run (| (ls ,sample-files -1)
+                          (xargs -I =  cp samples/= ".")))
+                       (& (make))
+                  )
                 (cout repo-url)
                 ))
       ((start) (with-cwd box-dir
