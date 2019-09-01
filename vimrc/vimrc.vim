@@ -1,0 +1,13 @@
+"exec    "normal :mapclear"
+"exec    "normal :nmapclear"
+"exec    "normal :vmapclear"
+"exec    "normal :omapclear"
+execute  "source $BASE_PATH/rc.vim"
+"exec     "normal ,to"
+
+exec    "normal 1gt"
+"exec    "normal ,tc"
+"execute ":e %"
+"execute ":winpos 0 0"
+"execute ":win 230 270"
+"execute ":win 126 40"
