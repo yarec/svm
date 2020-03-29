@@ -20,7 +20,7 @@ install_from_git() {
 
 ## MAIN ##
 
-for TOOL in git gcc autoconf; do
+for TOOL in git gcc autoconf make wget tar; do
     check_tool $TOOL
 done
 if ismac ; then
