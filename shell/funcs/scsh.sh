@@ -1,7 +1,7 @@
 
 ins_scsh(){
     SCSH_TMP_DIR=$HOME/.svm/src/scsh
-    SCSH_SOURCE="https://git.coding.net/softidy/scsh.git"
+    SCSH_SOURCE="https://e.coding.net/ear/scsh.git"
     if [ ! -d "$SCSH_TMP_DIR/.git" ]; then
         git_clone "scsh" $SCSH_TMP_DIR $SCSH_SOURCE
     fi
@@ -14,7 +14,7 @@ ins_scsh(){
 #deps git gcc autoconf
 ins_s48(){
     S48_TMP_DIR=$HOME/.svm/src/s48
-    S48_SOURCE="https://coding.net/u/softidy/p/s48"
+    S48_SOURCE="https://e.coding.net/ear/s48.git"
     if [ ! -d "$S48_TMP_DIR/.git" ]; then
         git_clone "s48" $S48_TMP_DIR $S48_SOURCE
     fi

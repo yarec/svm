@@ -43,12 +43,19 @@ lowercase(){
     echo "$1" | sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/"
 }
 
+os_id(){
+    echo `grep ^ID= /etc/os-release|sed s@^ID=@@`
+}
+
 os_name(){
     OS=`lowercase \`uname\``
     KERNEL=`uname -r`
     MACH=`uname -m`
 
-    if [ "{$OS}" == "windowsnt" ]; then
+    if [ -e /etc/os-release ]; then
+        OS=linux
+        DistroBasedOn=`os_id`
+    elif [ "{$OS}" == "windowsnt" ]; then
         OS=windows
     elif [ "$OS" == "darwin" ]; then
         OS=mac
@@ -104,10 +111,12 @@ ismac(){
 }
 
 pkg-install(){
-    case `os_name` in
+    osid=`os_name`
+    case $osid in
         debian) $sudo_str apt-get -y install $1;;
         redhat) $sudo_str yum -y install $1;;
         mac)    brew install $1;;
+        arch)   $sudo_str pacman -S --noconfirm $1;;
         *) echo os unknown;;
     esac
 }
