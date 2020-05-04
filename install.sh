@@ -43,12 +43,19 @@ lowercase(){
     echo "$1" | sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/"
 }
 
+os_id(){
+    echo `grep ^ID= /etc/os-release|sed s@^ID=@@`
+}
+
 os_name(){
     OS=`lowercase \`uname\``
     KERNEL=`uname -r`
     MACH=`uname -m`
 
-    if [ "{$OS}" == "windowsnt" ]; then
+    if [ -e /etc/os-release ]; then
+        OS=linux
+        DistroBasedOn=`os_id`
+    elif [ "{$OS}" == "windowsnt" ]; then
         OS=windows
     elif [ "$OS" == "darwin" ]; then
         OS=mac
@@ -104,10 +111,12 @@ ismac(){
 }
 
 pkg-install(){
-    case `os_name` in
+    osid=`os_name`
+    case $osid in
         debian) $sudo_str apt-get -y install $1;;
         redhat) $sudo_str yum -y install $1;;
         mac)    brew install $1;;
+        arch)   $sudo_str pacman -S --noconfirm $1;;
         *) echo os unknown;;
     esac
 }
@@ -149,7 +158,7 @@ git_clone(){
 
 ins_scsh(){
     SCSH_TMP_DIR=$HOME/.svm/src/scsh
-    SCSH_SOURCE="https://git.coding.net/softidy/scsh.git"
+    SCSH_SOURCE="https://e.coding.net/ear/scsh.git"
     if [ ! -d "$SCSH_TMP_DIR/.git" ]; then
         git_clone "scsh" $SCSH_TMP_DIR $SCSH_SOURCE
     fi
@@ -162,7 +171,7 @@ ins_scsh(){
 #deps git gcc autoconf
 ins_s48(){
     S48_TMP_DIR=$HOME/.svm/src/s48
-    S48_SOURCE="https://coding.net/u/softidy/p/s48"
+    S48_SOURCE="https://e.coding.net/ear/s48.git"
     if [ ! -d "$S48_TMP_DIR/.git" ]; then
         git_clone "s48" $S48_TMP_DIR $S48_SOURCE
     fi
